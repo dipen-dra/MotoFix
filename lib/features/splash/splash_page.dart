@@ -1,3 +1,121 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:motofix_app/features/auth/signin_page.dart';
+
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+  late Animation<double> _progressAnimation; // Added for progress indication
+  double _progressValue = 0.0;
+
+  // Define our theme colors
+  final Color _primaryColor = const Color(0xFF2A4759);
+  final Color _complementaryColor = const Color(0xFFB08A67);
+  final Color _accentColor = const Color(0xFFE8C19A);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 4), // Increased duration to 10 seconds
+      vsync: this,
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate( // Animate from 0 to 1
+      CurvedAnimation(parent: _controller, curve: Curves.linear), // Use linear curve
+    );
+
+    _progressAnimation.addListener(() { // Listen to animation changes
+      setState(() {
+        _progressValue = _progressAnimation.value; // Update value
+      });
+    });
+
+    _controller.forward();
+
+    Timer(const Duration(seconds: 4), () { // Match the timer with the animation duration
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const SignInPage()),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          color: _primaryColor, // Primary color for background
+        ),
+        child: FadeTransition(
+          opacity: _opacityAnimation,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/motofix_logo.png',
+                  height: 150,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.error, color: Colors.redAccent, size: 60),
+                ),
+                const SizedBox(height: 40),
+                // Use a LinearProgressIndicator for a progress bar
+                SizedBox(
+                  width: 200, // Set a fixed width for the progress bar
+                  child: LinearProgressIndicator(
+                    value: _progressValue, // Bind the animation value
+                    backgroundColor: _complementaryColor.withOpacity(0.3), // Lighter complementary color for the background
+                    valueColor: AlwaysStoppedAnimation<Color>(_accentColor), // Accent color for the progress bar
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  "MotoFix",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Your trusted partner for 2-wheeler vehicle care",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 
 // import 'dart:async';
