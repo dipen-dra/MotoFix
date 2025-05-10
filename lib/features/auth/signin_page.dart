@@ -421,13 +421,12 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   // Method to launch URL
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      _showSnackBar("Could not open the URL", Colors.red);
-    }
+  void _launchURL(String urlString) async {
+  final Uri url = Uri.parse(urlString);
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    _showSnackBar("Could not open the URL", Colors.red);
   }
+}
 
   @override
   void dispose() {
