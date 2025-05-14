@@ -899,9 +899,8 @@ class _SignInPageState extends State<SignInPage> {
     _passwordController.clear();
 
     _emailFocusNode.unfocus();
-  _passwordFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
   }
-
 
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -927,7 +926,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  void _launchURL(String urlString) async {
+  Future<void> _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       _showSnackBar("Could not open the URL", Colors.red);
@@ -979,83 +978,72 @@ class _SignInPageState extends State<SignInPage> {
 
                 // Email Field
                 TextField(
-  controller: _emailController,
-  focusNode: _emailFocusNode,
-  keyboardType: TextInputType.emailAddress,
-  style: const TextStyle(color: Colors.white),
-  maxLength: 50,
-  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-  onChanged: (value) {
-  setState(() {
-    if (value.isEmpty) {
-      _isEmailValid = true; // Don't show error if empty
-    } else {
-      _isEmailValid = _isValidEmail(value.trim());
-    }
-  });
-},
-
-  decoration: InputDecoration(
-    labelText: "Email",
-    labelStyle: const TextStyle(color: Colors.white70),
-    prefixIcon: const Icon(Icons.email, color: Colors.white70),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: _isEmailValid ? Colors.white30 : Colors.red),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.red),
-    ),
-    border: const OutlineInputBorder(),
-  ),
-),
+                  controller: _emailController,
+                  focusNode: _emailFocusNode,
+                  keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(color: Colors.white),
+                  maxLength: 50,
+                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
+                  onChanged: (value) {
+                    setState(() {
+                      _isEmailValid = value.isEmpty ? true : _isValidEmail(value.trim());
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: const TextStyle(color: Colors.white70),
+                    prefixIcon: const Icon(Icons.email, color: Colors.white70),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: _isEmailValid ? Colors.white30 : Colors.red),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.red),
+                    ),
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
 
                 const SizedBox(height: 20),
 
                 // Password Field
                 TextField(
-  controller: _passwordController,
-  obscureText: _obscurePassword,
-  focusNode: _passwordFocusNode,
-  style: const TextStyle(color: Colors.white),
-  maxLength: 12,
-  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-  onChanged: (value) {
-  setState(() {
-    if (value.isEmpty) {
-      _isPasswordValid = true; // Don't show error if empty
-    } else {
-      _isPasswordValid = value.length >= 6;
-    }
-  });
-},
-
-  decoration: InputDecoration(
-    labelText: "Password",
-    labelStyle: const TextStyle(color: Colors.white70),
-    prefixIcon: const Icon(Icons.lock, color: Colors.white70),
-    suffixIcon: IconButton(
-      icon: Icon(
-        _obscurePassword ? Icons.visibility_off : Icons.visibility,
-        color: Colors.white70,
-      ),
-      onPressed: () {
-        setState(() {
-          _obscurePassword = !_obscurePassword;
-        });
-      },
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-          color: _isPasswordValid ? Colors.white30 : Colors.red),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-          color: _isPasswordValid ? Colors.white : Colors.red),
-    ),
-    border: const OutlineInputBorder(),
-  ),
-),
-
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  focusNode: _passwordFocusNode,
+                  style: const TextStyle(color: Colors.white),
+                  maxLength: 12,
+                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
+                  onChanged: (value) {
+                    setState(() {
+                      _isPasswordValid = value.isEmpty ? true : value.length >= 6;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    labelStyle: const TextStyle(color: Colors.white70),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.white70,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isPasswordValid ? Colors.white30 : Colors.red),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isPasswordValid ? Colors.white : Colors.red),
+                    ),
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
 
                 const SizedBox(height: 10),
 

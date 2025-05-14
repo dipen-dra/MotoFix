@@ -555,6 +555,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:motofix_app/features/auth/signin_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -588,8 +589,15 @@ class _SignUpPageState extends State<SignUpPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty) {
-      _showSnackBar("Please enter your fullname", Colors.red);
+    // if (name.isEmpty) {
+    //   _showSnackBar("Please enter your fullname", Colors.red);
+    //   return;
+    // }
+
+    
+
+    if (name.isEmpty || email.isEmpty || fullPhoneNumber.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      _showSnackBar("Please fill in all fields", Colors.red);
       return;
     }
 
@@ -603,11 +611,6 @@ class _SignUpPageState extends State<SignUpPage> {
         _isEmailValid = false;
       });
       _showSnackBar("Please enter a valid email address", Colors.red);
-      return;
-    }
-
-    if (name.isEmpty || email.isEmpty || fullPhoneNumber.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      _showSnackBar("Please fill in all fields", Colors.red);
       return;
     }
 
@@ -645,12 +648,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
     _emailFocusNode.unfocus();
     _passwordFocusNode.unfocus();
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => const SignInPage()),
+  );
   }
 
   bool _isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$');
-    return emailRegex.hasMatch(email);
-  }
+  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  return emailRegex.hasMatch(email);
+}
+
 
   void _showSnackBar(String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
