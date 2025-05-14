@@ -572,10 +572,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   String fullPhoneNumber = "";
   bool _isPhoneValid = true;
+  bool _isPasswordValid = true;
+  bool _isEmailValid = true;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
-  // Focus nodes
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _confirmPasswordFocusNode = FocusNode();
@@ -587,12 +588,33 @@ class _SignUpPageState extends State<SignUpPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
+    if (name.isEmpty) {
+      _showSnackBar("Please enter your fullname", Colors.red);
+      return;
+    }
+
+    if (email.isEmpty) {
+      _showSnackBar("Please enter email address", Colors.red);
+      return;
+    }
+
+    if (!_isValidEmail(email)) {
+      setState(() {
+        _isEmailValid = false;
+      });
+      _showSnackBar("Please enter a valid email address", Colors.red);
+      return;
+    }
+
     if (name.isEmpty || email.isEmpty || fullPhoneNumber.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       _showSnackBar("Please fill in all fields", Colors.red);
       return;
     }
 
     if (password.length < 6) {
+      setState(() {
+        _isPasswordValid = false;
+      });
       _showSnackBar("Password should be at least 6 characters", Colors.red);
       return;
     }
@@ -607,7 +629,27 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
+    setState(() {
+      _isEmailValid = true;
+      _isPasswordValid = true;
+      _isPhoneValid = true;
+    });
+
     _showSnackBar("Sign-up successful!", Colors.lightGreenAccent);
+
+    _emailController.clear();
+    _passwordController.clear();
+    _nameController.clear();
+    _phoneController.clear();
+    _confirmPasswordController.clear();
+
+    _emailFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+  }
+
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$');
+    return emailRegex.hasMatch(email);
   }
 
   void _showSnackBar(String message, Color backgroundColor) {
@@ -648,10 +690,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF2A4759),
       body: GestureDetector(
-        onTap: () {
-          // Unfocus all fields when tapping outside
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
@@ -673,8 +712,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 10),
                 const Text("Create your account", style: TextStyle(color: Colors.white70)),
                 const SizedBox(height: 30),
-
-                // Full Name field
                 TextField(
                   controller: _nameController,
                   focusNode: _nameFocusNode,
@@ -683,52 +720,45 @@ class _SignUpPageState extends State<SignUpPage> {
                     labelText: "Full Name",
                     labelStyle: TextStyle(color: Colors.white70),
                     prefixIcon: Icon(Icons.person, color: Colors.white70),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white30),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Email field
                 TextField(
                   controller: _emailController,
                   focusNode: _emailFocusNode,
                   keyboardType: TextInputType.emailAddress,
                   style: const TextStyle(color: Colors.white),
-                  maxLength: 50,  // Character limit
-                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,  // Hide counter
-                  decoration: const InputDecoration(
+                  maxLength: 50,
+                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
+                  onChanged: (value) {
+                    setState(() {
+                      _isEmailValid = value.isEmpty || _isValidEmail(value.trim());
+                    });
+                  },
+                  decoration: InputDecoration(
                     labelText: "Email",
-                    labelStyle: TextStyle(color: Colors.white70),
-                    prefixIcon: Icon(Icons.email, color: Colors.white70),
+                    labelStyle: const TextStyle(color: Colors.white70),
+                    prefixIcon: const Icon(Icons.email, color: Colors.white70),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white30),
+                      borderSide: BorderSide(color: _isEmailValid ? Colors.white30 : Colors.red),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.red),
                     ),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Phone number field
                 IntlPhoneField(
                   controller: _phoneController,
                   decoration: const InputDecoration(
                     labelText: 'Phone Number',
                     labelStyle: TextStyle(color: Colors.white70),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white30),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                     prefixIcon: Icon(Icons.phone, color: Colors.white70),
                     border: OutlineInputBorder(),
                   ),
@@ -744,73 +774,64 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                 ),
                 const SizedBox(height: 20),
-
-                // Password field
                 TextField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
+                  focusNode: _passwordFocusNode,
                   style: const TextStyle(color: Colors.white),
-                  maxLength: 12,  // Character limit
-                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,  // Hide counter
+                  maxLength: 12,
+                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
+                  onChanged: (value) {
+                    setState(() {
+                      _isPasswordValid = value.isEmpty || value.length >= 6;
+                    });
+                  },
                   decoration: InputDecoration(
                     labelText: "Password",
                     labelStyle: const TextStyle(color: Colors.white70),
                     prefixIcon: const Icon(Icons.lock, color: Colors.white70),
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.white70,
-                      ),
+                      icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.white70),
                       onPressed: () {
                         setState(() {
                           _obscurePassword = !_obscurePassword;
                         });
                       },
                     ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white30),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: _isPasswordValid ? Colors.white30 : Colors.red),
                     ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: _isPasswordValid ? Colors.white : Colors.red),
                     ),
                     border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Confirm Password field
                 TextField(
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirmPassword,
                   style: const TextStyle(color: Colors.white),
-                  maxLength: 12,  // Character limit
-                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,  // Hide counter
+                  maxLength: 12,
+                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
                   decoration: InputDecoration(
                     labelText: "Confirm Password",
                     labelStyle: const TextStyle(color: Colors.white70),
                     prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.white70,
-                      ),
+                      icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility, color: Colors.white70),
                       onPressed: () {
                         setState(() {
                           _obscureConfirmPassword = !_obscureConfirmPassword;
                         });
                       },
                     ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white30),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
+                    enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                    focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                     border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
-
                 ElevatedButton(
                   onPressed: _signUp,
                   style: ElevatedButton.styleFrom(
@@ -824,19 +845,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                const Center(
-                  child: Text("Or Sign Up with", style: TextStyle(color: Colors.white60)),
-                ),
+                const Center(child: Text("Or Sign Up with", style: TextStyle(color: Colors.white60))),
                 const SizedBox(height: 10),
-
                 ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.facebook),
                   label: const Text("Sign Up with Facebook"),
                 ),
                 const SizedBox(height: 10),
-
                 ElevatedButton.icon(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
@@ -848,7 +864,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   label: const Text("Sign Up with Google"),
                 ),
                 const SizedBox(height: 30),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
