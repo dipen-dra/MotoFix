@@ -843,6 +843,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:motofix_app/features/auth/forget_password.dart';
+import 'package:motofix_app/view/dashboard_screen.dart';
 import 'signup_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -863,36 +864,35 @@ class _SignInPageState extends State<SignInPage> {
   bool _isEmailValid = true;
   bool _obscurePassword = true;
 
+
+
   void _signIn() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      _showSnackBar("Please fill in all fields", Colors.red);
-      return;
-    }
+  if (email.isEmpty || password.isEmpty) {
+    _showSnackBar("Please fill in all fields", Colors.red);
+    return;
+  }
 
-    if (!_isValidEmail(email)) {
-      setState(() {
-        _isEmailValid = false;
-      });
-      _showSnackBar("Please enter a valid email address", Colors.red);
-      return;
-    }
-
-    if (password.length < 6) {
-      setState(() {
-        _isPasswordValid = false;
-      });
-      _showSnackBar("Password should be at least 6 characters", Colors.red);
-      return;
-    }
-
+  if (!_isValidEmail(email)) {
     setState(() {
-      _isEmailValid = true;
-      _isPasswordValid = true;
+      _isEmailValid = false;
     });
+    _showSnackBar("Please enter a valid email address", Colors.red);
+    return;
+  }
 
+  if (password.length < 6) {
+    setState(() {
+      _isPasswordValid = false;
+    });
+    _showSnackBar("Password should be at least 6 characters", Colors.red);
+    return;
+  }
+
+  // Admin credentials check
+  if (email == "admin123@gmail.com" && password == "admin123") {
     _showSnackBar("Sign-in successful!", Colors.lightGreenAccent);
 
     _emailController.clear();
@@ -900,7 +900,31 @@ class _SignInPageState extends State<SignInPage> {
 
     _emailFocusNode.unfocus();
     _passwordFocusNode.unfocus();
+
+    // Navigate to the dashboard
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const DashboardScreen()),
+    );
+    return; // Prevent further execution
   }
+  else{
+    _showSnackBar("Invalid email or password", Colors.red);
+  }
+
+  // setState(() {
+  //   _isEmailValid = true;
+  //   _isPasswordValid = true;
+  // });
+
+  // _showSnackBar("Sign-in successful!", Colors.lightGreenAccent);
+
+  _emailController.clear();
+  _passwordController.clear();
+
+  _emailFocusNode.unfocus();
+  _passwordFocusNode.unfocus();
+}
 
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
