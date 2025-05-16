@@ -248,6 +248,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   bool _emailSent = false;
   bool _isEmailValid = true; // To track email validity
+  final FocusNode _emailFocusNode = FocusNode(); // Add FocusNode
 
   // Email validation using regex
   bool _isValidEmail(String email) {
@@ -271,6 +272,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           _emailSent = false;
         });
       });
+
+      _emailController.clear(); // Clear the email field after sending
+      _emailFocusNode.unfocus(); // Unfocus the field
     } else {
       setState(() {
         _isEmailValid = false; // Set email as invalid when validation fails
@@ -291,6 +295,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   void dispose() {
     _emailController.dispose();
+    _emailFocusNode.dispose(); // Dispose the FocusNode
     super.dispose();
   }
 
@@ -323,6 +328,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               const SizedBox(height: 30),
               TextFormField(
                 controller: _emailController,
+                focusNode: _emailFocusNode, // Assign FocusNode
                 style: const TextStyle(color: Colors.white),
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
@@ -335,10 +341,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.red),
                   ),
-                  errorBorder: OutlineInputBorder(
+                  errorBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red),
                   ),
-                  focusedErrorBorder: OutlineInputBorder(
+                  focusedErrorBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -365,10 +371,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               ),
               const SizedBox(height: 20),
               if (_emailSent)
-                Center(
-                  child: const Text(
+                const Center(
+                  child: Text(
                     "Check your inbox for the reset link.",
-                    style: TextStyle(color:Colors.white,)
+                    style: TextStyle(color: Colors.white,)
                   ),
                 ),
             ],
@@ -378,4 +384,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     );
   }
 }
+
+
 

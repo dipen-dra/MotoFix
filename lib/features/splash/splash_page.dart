@@ -25,9 +25,9 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 5), // Match timer and animation
+      duration: const Duration(seconds: 3), // Match timer and animation
       vsync: this,
-    );
+    ); 
 
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOut),
@@ -45,7 +45,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     _controller.forward();
 
-    Timer(const Duration(seconds: 4), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const SignInPage()),
