@@ -1,6 +1,3 @@
-
-
-
 // import 'package:flutter/material.dart';
 // import 'package:motofix_app/features/auth/forget_password.dart';
 // import 'signup_page.dart';// Newly added
@@ -840,6 +837,10 @@
 //     );
 //   }
 // }
+
+
+
+
 // import 'package:flutter/material.dart';
 // import 'package:motofix_app/features/auth/forget_password.dart';
 // import 'package:motofix_app/view/dashboard_screen.dart';
@@ -1287,13 +1288,13 @@ class _SignInPageState extends State<SignInPage> {
       // Navigate to the dashboard
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const MotoFixDashboard()),
       );
       return; // Prevent further execution
-    } else {
+    }
+     else {
       _showSnackBar("Invalid email or password", Colors.red);
     }
-
     setState(() {
       _isLoading = false; // Hide loading indicator
     });
@@ -1555,14 +1556,14 @@ class _SignInPageState extends State<SignInPage> {
                     )
                   ],
                 ),
-                const SizedBox(height: 5), // Added spacing
+                const SizedBox(height: 50), // Added spacing
                 const Center(
                   child: Text(
                     "Contact Us", // Added Contact Us text
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(height: 35),
+                const SizedBox(height: 20),
                 // Instagram and Facebook logos
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -923,6 +923,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isEmailValid = true;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _termsAgreed = false;
 
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -934,13 +935,6 @@ class _SignUpPageState extends State<SignUpPage> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
-
-    // if (name.isEmpty) {
-    //   _showSnackBar("Please enter your fullname", Colors.red);
-    //   return;
-    // }
-
-
 
     if (name.isEmpty || email.isEmpty || fullPhoneNumber.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       _showSnackBar("Please fill in all fields", Colors.red);
@@ -978,6 +972,11 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
+    if (!_termsAgreed) {
+      _showSnackBar("Please agree to the terms and conditions", Colors.red);
+      return;
+    }
+
     setState(() {
       _isEmailValid = true;
       _isPasswordValid = true;
@@ -1006,7 +1005,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return emailRegex.hasMatch(email);
   }
 
-
   void _showSnackBar(String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -1023,6 +1021,65 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showTermsAndConditions() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF2A4759),
+          title: const Text('Terms and Conditions'),
+          content: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '1. Acceptance of Terms',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('By creating an account, you agree to these terms and conditions.'),
+                SizedBox(height: 10),
+                Text(
+                  '2. Account Responsibilities',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('You are responsible for maintaining the confidentiality of your account and password.'),
+                SizedBox(height: 10),
+                Text(
+                  '3. Use of the Service',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('The service is provided for personal, non-commercial use only.'),
+                SizedBox(height: 10),
+                Text(
+                  '4. Privacy Policy',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('Your use of the service is also governed by our Privacy Policy.'),
+                SizedBox(height: 10),
+                Text(
+                  '5. Modifications',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('We reserve the right to modify these terms at any time.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              // backgroundColor:Colors.white,
+              child: const Text('Close',
+              style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -1186,9 +1243,38 @@ class _SignUpPageState extends State<SignUpPage> {
                     border: const OutlineInputBorder(),
                   ),
                 ),
+                const SizedBox(height: 15),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _termsAgreed,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _termsAgreed = value!;
+                        });
+                      },
+                      activeColor: Colors.white,
+                      checkColor: const Color(0xFF2A4759),
+                    ),
+                    GestureDetector(
+                      onTap: _showTermsAndConditions,
+                      child: const Text(
+                        'I agree to the ',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _showTermsAndConditions,
+                      child: const Text(
+                        'Terms and Conditions',
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _signUp,
+                  onPressed: _termsAgreed ? _signUp : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: const Color(0xFF2A4759),

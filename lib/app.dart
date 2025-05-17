@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motofix_app/features/splash/splash_page.dart';
+import 'package:motofix_app/view/dashboard_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -16,8 +17,7 @@ class MyApp extends StatelessWidget {
           labelStyle: TextStyle(color: Colors.white70),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white30),
-          ),
-          focusedBorder: OutlineInputBorder(
+          ),focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
           ),
         ),
