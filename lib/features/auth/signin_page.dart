@@ -586,7 +586,7 @@ class _SignInPageState extends State<SignInPage> {
                           buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
                           onChanged: (value) {
                             setState(() {
-                              _isPasswordValid = value.isEmpty ? true : value.length >= 6;
+                              _isPasswordValid = value.isEmpty ? true : value.length >= 8;
                             });
                           },
                           decoration: InputDecoration(
