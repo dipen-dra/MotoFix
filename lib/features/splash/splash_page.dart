@@ -71,7 +71,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/motofix_logo.png',
+                  'assets/images/motofix_logo.png',
                   height: 150,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) =>

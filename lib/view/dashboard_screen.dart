@@ -1,25 +1,639 @@
-// import 'package:flutter/material.dart';
+// // import 'package:flutter/material.dart';
 
-// class DashboardScreen extends StatelessWidget {
-//   const DashboardScreen({super.key});
+// // class DashboardScreen extends StatelessWidget {
+// //   const DashboardScreen({super.key});
+
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(
+// //         title: const Text('Dashboard'),
+// //       ),
+// //       body: const Center(
+// //         child: Text('Welcome to the Dashboard!'),
+// //       ),
+// //     );
+// //   }
+// // }
+
+// import 'package:flutter/material.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import the Font Awesome package
+
+// // Dummy data for services
+// final List<Map<String, String>> _nearYouServices = [
+//   {'title': 'Oil Servicing', 'price': 'Rs. 1000', 'icon': 'oil'},
+//   {'title': 'Tire Replacement', 'price': 'Rs. 2500', 'icon': 'tire'},
+//   {'title': 'General Checkup', 'price': 'Rs. 1500', 'icon': 'checkup'},
+//   {'title': 'Battery Service', 'price': 'Rs. 3000', 'icon': 'battery'},
+// ];
+
+// // Dummy data for recent activities
+// final List<Map<String, String>> _recentActivities = [
+//   {'title': 'Oil Servicing', 'date': '2024-07-28'},
+//   {'title': 'Tire Replacement', 'date': '2024-07-25'},
+// ];
+
+// class MotoFixDashboard extends StatefulWidget {
+//   const MotoFixDashboard({super.key});
+
+//   @override
+//   State<MotoFixDashboard> createState() => _MotoFixDashboardState();
+// }
+
+// class _MotoFixDashboardState extends State<MotoFixDashboard> {
+//   String _location = 'Set your location'; // Default location text
+//   final FocusNode _searchFocusNode = FocusNode(); // FocusNode for search field
+
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   void dispose() {
+//     _searchFocusNode.dispose(); // Dispose the FocusNode
+//     super.dispose();
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Dashboard'),
+//     return GestureDetector(
+//       onTap: () {
+//         // Unfocus the search field when tapping outside of it
+//         _searchFocusNode.unfocus();
+//       },
+//       child: Scaffold(
+//         backgroundColor: const Color(0xFF2A4759), // Background color
+//         body: SafeArea(
+//           child: Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: <Widget>[
+//                 _buildAppBar(), // Custom App Bar
+//                 const SizedBox(height: 20),
+//                 _buildLocationWidget(), //location widget
+//                 const SizedBox(height: 20),
+//                 _buildSearchBar(context), // Search Bar
+//                 const SizedBox(height: 20),
+//                 _buildServiceCards(context), // "Get Services from Home" Cards
+//                 const SizedBox(height: 20),
+//                 _buildNearYouSection(context), // "Near You" Section
+//                 const SizedBox(height: 20),
+//                 _buildRecentActivities(context), // Recent Activities
+//               ],
+//             ),
+//           ),
+//         ),
+//         bottomNavigationBar: _buildBottomNavigationBar(context), // Bottom Navigation
 //       ),
-//       body: const Center(
-//         child: Text('Welcome to the Dashboard!'),
+//     );
+//   }
+
+//   // Custom App Bar
+//   Widget _buildAppBar() {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: <Widget>[
+//         IconButton(
+//           icon: const Icon(Icons.menu, color: Colors.white),
+//           onPressed: () {
+//             // Handle menu button press
+//           },
+//         ),
+//         const Text(
+//           'Home',
+//           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+//         ),
+//         IconButton(
+//           icon: const Icon(Icons.notifications_none, color: Colors.white),
+//           onPressed: () {
+//             // Handle notifications button press
+//           },
+//         ),
+//       ],
+//     );
+//   }// Search Bar
+//   Widget _buildSearchBar(BuildContext context) {
+//     return Container(
+//       height: 40, // Reduced height
+//       child: TextField(
+//         focusNode: _searchFocusNode, // Attach the FocusNode
+//         style: const TextStyle(color: Colors.white),
+//         decoration: InputDecoration(
+//           hintText: 'Search service, location',
+//           hintStyle: TextStyle(color: Colors.white70),
+//           prefixIcon: const Icon(Icons.search, color: Colors.white70),
+//           border: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(12), // Rounded edges
+//             borderSide: BorderSide.none, // Remove the border
+//           ),
+//           filled: true,
+//           fillColor: Colors.white12, // Use a semi-transparent white
+//           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10), // Adjust padding
+//         ),
 //       ),
+//     );
+//   }
+
+//   // Location Display Widget
+//   Widget _buildLocationWidget() {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         const Icon(Icons.location_on, color: Colors.white70),
+//         const SizedBox(width: 8),
+//         Text(
+//           _location, // Use the _location variable here
+//           style: const TextStyle(fontSize: 16, color: Colors.white70),
+//         ),
+//       ],
+//     );
+//   }
+
+//   // "Get Services from Home" Cards
+//   Widget _buildServiceCards(BuildContext context) {
+//     return Row(
+//       children: <Widget>[
+//         _buildServiceCard(context, title: 'Get Services from\nhome', icon: Icons.home_repair_service),
+//         const SizedBox(width: 10),
+//         _buildServiceCard(context, title: 'Get Services from\nhome', icon: Icons.home_repair_service),
+//       ],
+//     );
+//   }
+
+//   // Individual Service Card
+//   Widget _buildServiceCard(BuildContext context, {required String title, required IconData icon}) {
+//     return Expanded(
+//       child: Container(
+//         padding: const EdgeInsets.all(16),
+//         decoration: BoxDecoration(
+//           color: const Color(0xFF395668), // Darker container color
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: <Widget>[
+//             Icon(icon, size: 40, color: Colors.white),
+//             const SizedBox(height: 8),
+//             Text(
+//               title,
+//               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   // "Near You" Section
+//   Widget _buildNearYouSection(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: <Widget>[
+//             const Text(
+//               'Near You',
+//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+//             ),
+//             TextButton(
+//               onPressed: () {
+//                 // Handle "See all" button press
+//               },
+//               child: const Text(
+//                 'See all',
+//                 style: TextStyle(color: Colors.blue),
+//               ),
+//             ),
+//           ],
+//         ),
+//         const SizedBox(height: 10),
+//         SizedBox(
+//           height: 150, // Fixed height for the horizontal list
+//           child: ListView.builder(
+//             scrollDirection: Axis.horizontal,
+//             itemCount: _nearYouServices.length,
+//             itemBuilder: (context, index) {
+//               final service = _nearYouServices[index];
+//               return _buildServiceListItem(context, service: service);
+//             },
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   //build service list item
+//   Widget _buildServiceListItem(BuildContext context, {required Map<String, String> service}) {
+//     IconData? serviceIcon;
+//     switch (service['icon']) {
+//       case 'oil':
+//         serviceIcon = FontAwesomeIcons.oilCan;
+//         break;
+//       case 'tire':
+//         serviceIcon = FontAwesomeIcons.solidTired;
+//         break;
+//       case 'checkup':
+//         serviceIcon = FontAwesomeIcons.stethoscope;
+//         break;
+//       case 'battery':
+//         serviceIcon = FontAwesomeIcons.batteryFull;
+//         break;
+//       default:
+//         serviceIcon = Icons.settings;
+//     }
+
+//     return Container(
+//       width: 130, // Fixed width for each item
+//       margin: const EdgeInsets.only(right: 10),
+//       padding: const EdgeInsets.all(12),
+//       decoration: BoxDecoration(
+//         color: const Color(0xFF395668),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: <Widget>[
+//           Icon(serviceIcon, size: 30, color: Colors.white70),
+//           const SizedBox(height: 8),
+//           Text(
+//             service['title'] ?? '',
+//             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
+//           ),
+//           const SizedBox(height: 4),
+//           Text(
+//             service['price'] ?? '',
+//             style: const TextStyle(fontSize: 12, color: Colors.greenAccent),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // Recent Activities
+//   Widget _buildRecentActivities(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         const Text(
+//           'Recent Activities',
+//           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+//         ),
+//         const SizedBox(height: 10),
+//         // Use a ListView.builder to create the activity items
+//         ListView.builder(
+//           physics: const NeverScrollableScrollPhysics(), // Disable scrolling, as it's within a Column
+//           shrinkWrap: true, // Important for lists within columns
+//           itemCount: _recentActivities.length,
+//           itemBuilder: (context, index) {
+//             final activity = _recentActivities[index];
+//             return _buildActivityListItem(context, activity: activity); // Build each activity item
+//           },
+//         ),
+//       ],
+//     );
+//   }
+
+//   // Activity Item
+//   Widget _buildActivityListItem(BuildContext context, {required Map<String, String> activity}) {
+//     return Container(
+//     margin: const EdgeInsets.only(bottom: 8),
+//     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+//     decoration: BoxDecoration(
+//       color: const Color(0xFF395668),
+//       borderRadius: BorderRadius.circular(8),
+//     ),
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: <Widget>[
+//         Text(
+//           activity['title'] ?? '',
+//           style: const TextStyle(fontSize: 14, color: Colors.white),
+//         ),
+//         Text(
+//           activity['date'] ?? '',
+//           style: const TextStyle(fontSize: 12, color: Colors.white70),
+//         ),
+//       ],
+//     ),
+//   );
+// }
+
+//   // Bottom Navigation Bar
+//   Widget _buildBottomNavigationBar(BuildContext context) {
+//     return BottomNavigationBar(
+//       backgroundColor: const Color(0xFF2A4759), // Match the overall background
+//       selectedItemColor: Colors.white,
+//       unselectedItemColor: Colors.white70,
+//       type: BottomNavigationBarType.fixed, // Ensure labels are always visible
+//       items: const <BottomNavigationBarItem>[
+//         BottomNavigationBarItem(
+//           icon: Icon(Icons.home),
+//           label: 'Home',
+//         ),
+//         BottomNavigationBarItem(
+//           icon: Icon(Icons.local_activity),
+//           label: 'Activities',
+//         ),
+//         BottomNavigationBarItem(
+//           icon: Icon(Icons.person),
+//           label: 'Profile',
+//         ),
+//       ],
+//       onTap: (index) {
+//         // Handle bottom navigation item taps
+//         if (index == 0) {
+//           // Navigate to home
+//         } else if (index == 1) {
+//           // Navigate to activities
+//         } else if (index == 2) {
+//           // Navigate to profile
+//         }
+//       },
+//     );
+//   }
+// }
+
+
+// import 'package:flutter/material.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// final List<Map<String, String>> _nearYouServices = [
+//   {'title': 'Oil Servicing', 'price': 'Rs. 1000', 'icon': 'oil'},
+//   {'title': 'Tire Replacement', 'price': 'Rs. 2500', 'icon': 'tire'},
+//   {'title': 'General Checkup', 'price': 'Rs. 1500', 'icon': 'checkup'},
+//   {'title': 'Battery Service', 'price': 'Rs. 3000', 'icon': 'battery'},
+// ];
+
+// final List<Map<String, String>> _recentActivities = [
+//   {'title': 'Oil Servicing', 'date': '2024-07-28'},
+//   {'title': 'Tire Replacement', 'date': '2024-07-25'},
+// ];
+
+// class MotoFixDashboard extends StatefulWidget {
+//   const MotoFixDashboard({super.key});
+
+//   @override
+//   State<MotoFixDashboard> createState() => _MotoFixDashboardState();
+// }
+
+// class _MotoFixDashboardState extends State<MotoFixDashboard> {
+//   String _location = 'Set your location';
+//   final FocusNode _searchFocusNode = FocusNode();
+
+//   @override
+//   void dispose() {
+//     _searchFocusNode.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final screenHeight = MediaQuery.of(context).size.height;
+//     final screenWidth = MediaQuery.of(context).size.width;
+
+//     return GestureDetector(
+//       onTap: () => _searchFocusNode.unfocus(),
+//       child: Scaffold(
+//         backgroundColor: const Color(0xFF2A4759),
+//         body: SafeArea(
+//           child: SingleChildScrollView(
+//             child: Padding(
+//               padding: EdgeInsets.all(screenWidth * 0.04),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: <Widget>[
+//                   _buildAppBar(),
+//                   SizedBox(height: screenHeight * 0.02),
+//                   _buildLocationWidget(),
+//                   SizedBox(height: screenHeight * 0.02),
+//                   _buildSearchBar(screenWidth),
+//                   SizedBox(height: screenHeight * 0.02),
+//                   _buildServiceCards(),
+//                   SizedBox(height: screenHeight * 0.02),
+//                   _buildNearYouSection(screenHeight),
+//                   SizedBox(height: screenHeight * 0.02),
+//                   _buildRecentActivities(),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//         bottomNavigationBar: _buildBottomNavigationBar(),
+//       ),
+//     );
+//   }
+
+//   Widget _buildAppBar() {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: <Widget>[
+//         IconButton(
+//           icon: const Icon(Icons.menu, color: Colors.white),
+//           onPressed: () {},
+//         ),
+//         const Text(
+//           'Home',
+//           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+//         ),
+//         IconButton(
+//           icon: const Icon(Icons.notifications_none, color: Colors.white),
+//           onPressed: () {},
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildSearchBar(double screenWidth) {
+//     return SizedBox(
+//       height: 40,
+//       child: TextField(
+//         focusNode: _searchFocusNode,
+//         style: const TextStyle(color: Colors.white),
+//         decoration: InputDecoration(
+//           hintText: 'Search service, location',
+//           hintStyle: const TextStyle(color: Colors.white70),
+//           prefixIcon: const Icon(Icons.search, color: Colors.white70),
+//           border: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(12),
+//             borderSide: BorderSide.none,
+//           ),
+//           filled: true,
+//           fillColor: Colors.white12,
+//           contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildLocationWidget() {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         const Icon(Icons.location_on, color: Colors.white70),
+//         const SizedBox(width: 8),
+//         Text(_location, style: const TextStyle(fontSize: 16, color: Colors.white70)),
+//       ],
+//     );
+//   }
+
+//   Widget _buildServiceCards() {
+//     return Row(
+//       children: <Widget>[
+//         _buildServiceCard(title: 'Get Services from\nhome', icon: Icons.home_repair_service),
+//         const SizedBox(width: 10),
+//         _buildServiceCard(title: 'Get Services from\nhome', icon: Icons.home_repair_service),
+//       ],
+//     );
+//   }
+
+//   Widget _buildServiceCard({required String title, required IconData icon}) {
+//     return Expanded(
+//       child: Container(
+//         padding: const EdgeInsets.all(16),
+//         decoration: BoxDecoration(
+//           color: const Color(0xFF395668),
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: <Widget>[
+//             Icon(icon, size: 40, color: Colors.white),
+//             const SizedBox(height: 8),
+//             Text(
+//               title,
+//               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildNearYouSection(double screenHeight) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: <Widget>[
+//             const Text('Near You', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+//             TextButton(
+//               onPressed: () {},
+//               child: const Text('See all', style: TextStyle(color: Colors.blue)),
+//             ),
+//           ],
+//         ),
+//         SizedBox(height: screenHeight * 0.01),
+//         SizedBox(
+//           height: screenHeight * 0.2,
+//           child: ListView.builder(
+//             scrollDirection: Axis.horizontal,
+//             itemCount: _nearYouServices.length,
+//             itemBuilder: (context, index) => _buildServiceListItem(service: _nearYouServices[index]),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildServiceListItem({required Map<String, String> service}) {
+//     IconData? serviceIcon;
+//     switch (service['icon']) {
+//       case 'oil':
+//         serviceIcon = FontAwesomeIcons.oilCan;
+//         break;
+//       case 'tire':
+//         serviceIcon = FontAwesomeIcons.solidCircleDot; // fallback for tire icon
+//         break;
+//       case 'checkup':
+//         serviceIcon = FontAwesomeIcons.stethoscope;
+//         break;
+//       case 'battery':
+//         serviceIcon = FontAwesomeIcons.carBattery;
+//         break;
+//       default:
+//         serviceIcon = Icons.settings;
+//     }
+
+//     return Container(
+//       width: 130,
+//       margin: const EdgeInsets.only(right: 10),
+//       padding: const EdgeInsets.all(12),
+//       decoration: BoxDecoration(
+//         color: const Color(0xFF395668),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: <Widget>[
+//           Icon(serviceIcon, size: 30, color: Colors.white70),
+//           const SizedBox(height: 8),
+//           Text(service['title'] ?? '', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
+//           const SizedBox(height: 4),
+//           Text(service['price'] ?? '', style: const TextStyle(fontSize: 12, color: Colors.greenAccent)),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildRecentActivities() {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         const Text('Recent Activities', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+//         const SizedBox(height: 10),
+//         ListView.builder(
+//           physics: const NeverScrollableScrollPhysics(),
+//           shrinkWrap: true,
+//           itemCount: _recentActivities.length,
+//           itemBuilder: (context, index) => _buildActivityListItem(activity: _recentActivities[index]),
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildActivityListItem({required Map<String, String> activity}) {
+//     return Container(
+//       margin: const EdgeInsets.only(bottom: 8),
+//       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+//       decoration: BoxDecoration(
+//         color: const Color(0xFF395668),
+//         borderRadius: BorderRadius.circular(8),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: <Widget>[
+//           Text(activity['title'] ?? '', style: const TextStyle(fontSize: 14, color: Colors.white)),
+//           Text(activity['date'] ?? '', style: const TextStyle(fontSize: 12, color: Colors.white70)),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildBottomNavigationBar() {
+//     return BottomNavigationBar(
+//       backgroundColor: const Color(0xFF2A4759),
+//       selectedItemColor: Colors.white,
+//       unselectedItemColor: Colors.white70,
+//       type: BottomNavigationBarType.fixed,
+//       items: const [
+//         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+//         BottomNavigationBarItem(icon: Icon(Icons.local_activity), label: 'Activities'),
+//         BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+//       ],
+//       onTap: (index) {
+//         // Handle bottom navigation
+//       },
 //     );
 //   }
 // }
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import the Font Awesome package
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// Dummy data for services
 final List<Map<String, String>> _nearYouServices = [
   {'title': 'Oil Servicing', 'price': 'Rs. 1000', 'icon': 'oil'},
   {'title': 'Tire Replacement', 'price': 'Rs. 2500', 'icon': 'tire'},
@@ -27,7 +641,6 @@ final List<Map<String, String>> _nearYouServices = [
   {'title': 'Battery Service', 'price': 'Rs. 3000', 'icon': 'battery'},
 ];
 
-// Dummy data for recent activities
 final List<Map<String, String>> _recentActivities = [
   {'title': 'Oil Servicing', 'date': '2024-07-28'},
   {'title': 'Tire Replacement', 'date': '2024-07-25'},
@@ -41,65 +654,63 @@ class MotoFixDashboard extends StatefulWidget {
 }
 
 class _MotoFixDashboardState extends State<MotoFixDashboard> {
-  String _location = 'Set your location'; // Default location text
-  final FocusNode _searchFocusNode = FocusNode(); // FocusNode for search field
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String _location = 'Set your location';
+  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _searchFocusNode.dispose(); // Dispose the FocusNode
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Responsive sizes for fonts and icons
+    final double titleFontSize = screenWidth > 600 ? 18 : 14;
+    final double iconSize = screenWidth > 600 ? 36 : 30;
+
     return GestureDetector(
-      onTap: () {
-        // Unfocus the search field when tapping outside of it
-        _searchFocusNode.unfocus();
-      },
+      onTap: () => _searchFocusNode.unfocus(),
       child: Scaffold(
-        backgroundColor: const Color(0xFF2A4759), // Background color
+        backgroundColor: const Color(0xFF2A4759),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildAppBar(), // Custom App Bar
-                const SizedBox(height: 20),
-                _buildLocationWidget(), //location widget
-                const SizedBox(height: 20),
-                _buildSearchBar(context), // Search Bar
-                const SizedBox(height: 20),
-                _buildServiceCards(context), // "Get Services from Home" Cards
-                const SizedBox(height: 20),
-                _buildNearYouSection(context), // "Near You" Section
-                const SizedBox(height: 20),
-                _buildRecentActivities(context), // Recent Activities
-              ],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(screenWidth * 0.04),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildAppBar(),
+                  SizedBox(height: screenHeight * 0.02),
+                  _buildLocationWidget(),
+                  SizedBox(height: screenHeight * 0.02),
+                  _buildSearchBar(screenWidth),
+                  SizedBox(height: screenHeight * 0.02),
+                  _buildServiceCards(),
+                  SizedBox(height: screenHeight * 0.02),
+                  _buildNearYouSection(screenHeight, titleFontSize, iconSize),
+                  SizedBox(height: screenHeight * 0.02),
+                  _buildRecentActivities(),
+                ],
+              ),
             ),
           ),
         ),
-        bottomNavigationBar: _buildBottomNavigationBar(context), // Bottom Navigation
+        bottomNavigationBar: _buildBottomNavigationBar(),
       ),
     );
   }
 
-  // Custom App Bar
   Widget _buildAppBar() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         IconButton(
           icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            // Handle menu button press
-          },
+          onPressed: () {},
         ),
         const Text(
           'Home',
@@ -107,68 +718,61 @@ class _MotoFixDashboardState extends State<MotoFixDashboard> {
         ),
         IconButton(
           icon: const Icon(Icons.notifications_none, color: Colors.white),
-          onPressed: () {
-            // Handle notifications button press
-          },
+          onPressed: () {},
         ),
       ],
     );
-  }// Search Bar
-  Widget _buildSearchBar(BuildContext context) {
-    return Container(
-      height: 40, // Reduced height
+  }
+
+  Widget _buildSearchBar(double screenWidth) {
+    return SizedBox(
+      height: 40,
       child: TextField(
-        focusNode: _searchFocusNode, // Attach the FocusNode
+        focusNode: _searchFocusNode,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Search service, location',
-          hintStyle: TextStyle(color: Colors.white70),
+          hintStyle: const TextStyle(color: Colors.white70),
           prefixIcon: const Icon(Icons.search, color: Colors.white70),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12), // Rounded edges
-            borderSide: BorderSide.none, // Remove the border
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.white12, // Use a semi-transparent white
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10), // Adjust padding
+          fillColor: Colors.white12,
+          contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
         ),
       ),
     );
   }
 
-  // Location Display Widget
   Widget _buildLocationWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Icon(Icons.location_on, color: Colors.white70),
         const SizedBox(width: 8),
-        Text(
-          _location, // Use the _location variable here
-          style: const TextStyle(fontSize: 16, color: Colors.white70),
-        ),
+        Text(_location, style: const TextStyle(fontSize: 16, color: Colors.white70)),
       ],
     );
   }
 
-  // "Get Services from Home" Cards
-  Widget _buildServiceCards(BuildContext context) {
+  Widget _buildServiceCards() {
     return Row(
       children: <Widget>[
-        _buildServiceCard(context, title: 'Get Services from\nhome', icon: Icons.home_repair_service),
+        _buildServiceCard(title: 'Get Services from\nhome', icon: Icons.home_repair_service),
         const SizedBox(width: 10),
-        _buildServiceCard(context, title: 'Get Services from\nhome', icon: Icons.home_repair_service),
+        _buildServiceCard(title: 'Get Services from\nhome', icon: Icons.home_repair_service),
       ],
     );
   }
 
-  // Individual Service Card
-  Widget _buildServiceCard(BuildContext context, {required String title, required IconData icon}) {
+  Widget _buildServiceCard({required String title, required IconData icon}) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF395668), // Darker container color
+          color: const Color(0xFF395668),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -186,176 +790,139 @@ class _MotoFixDashboardState extends State<MotoFixDashboard> {
     );
   }
 
-  // "Near You" Section
-  Widget _buildNearYouSection(BuildContext context) {
+  Widget _buildNearYouSection(double screenHeight, double titleFontSize, double iconSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            const Text(
-              'Near You',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
+            const Text('Near You', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
             TextButton(
-              onPressed: () {
-                // Handle "See all" button press
-              },
-              child: const Text(
-                'See all',
-                style: TextStyle(color: Colors.blue),
-              ),
+              onPressed: () {},
+              child: const Text('See all', style: TextStyle(color: Colors.blue)),
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: screenHeight * 0.01),
         SizedBox(
-          height: 150, // Fixed height for the horizontal list
+          height: screenHeight * 0.22,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _nearYouServices.length,
-            itemBuilder: (context, index) {
-              final service = _nearYouServices[index];
-              return _buildServiceListItem(context, service: service);
-            },
+            itemBuilder: (context, index) => _buildServiceListItem(
+              service: _nearYouServices[index],
+              titleFontSize: titleFontSize,
+              iconSize: iconSize,
+            ),
           ),
         ),
       ],
     );
   }
 
-  //build service list item
-  Widget _buildServiceListItem(BuildContext context, {required Map<String, String> service}) {
+  Widget _buildServiceListItem({
+    required Map<String, String> service,
+    required double titleFontSize,
+    required double iconSize,
+  }) {
     IconData? serviceIcon;
     switch (service['icon']) {
       case 'oil':
         serviceIcon = FontAwesomeIcons.oilCan;
         break;
       case 'tire':
-        serviceIcon = FontAwesomeIcons.solidTired;
+        serviceIcon = FontAwesomeIcons.solidCircleDot; // fallback for tire icon
         break;
       case 'checkup':
         serviceIcon = FontAwesomeIcons.stethoscope;
         break;
       case 'battery':
-        serviceIcon = FontAwesomeIcons.batteryFull;
+        serviceIcon = FontAwesomeIcons.carBattery;
         break;
       default:
         serviceIcon = Icons.settings;
     }
 
     return Container(
-      width: 130, // Fixed width for each item
-      margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.all(12),
+      width: 130, // reduced width to avoid overflow
+      margin: const EdgeInsets.only(right: 8), // reduced margin to avoid overflow
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: const Color(0xFF395668),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(serviceIcon, size: 30, color: Colors.white70),
-          const SizedBox(height: 8),
-          Text(
-            service['title'] ?? '',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
+          Icon(serviceIcon, size: iconSize, color: Colors.white70),
+          const SizedBox(height: 10),
+          Flexible(
+            child: Text(
+              service['title'] ?? '',
+              style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.w500, color: Colors.white),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Text(
             service['price'] ?? '',
-            style: const TextStyle(fontSize: 12, color: Colors.greenAccent),
+            style: const TextStyle(fontSize: 13, color: Colors.greenAccent),
           ),
         ],
       ),
     );
   }
 
-  // Recent Activities
-  Widget _buildRecentActivities(BuildContext context) {
+  Widget _buildRecentActivities() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Text(
-          'Recent Activities',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
+        const Text('Recent Activities', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
         const SizedBox(height: 10),
-        // Use a ListView.builder to create the activity items
         ListView.builder(
-          physics: const NeverScrollableScrollPhysics(), // Disable scrolling, as it's within a Column
-          shrinkWrap: true, // Important for lists within columns
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           itemCount: _recentActivities.length,
-          itemBuilder: (context, index) {
-            final activity = _recentActivities[index];
-            return _buildActivityListItem(context, activity: activity); // Build each activity item
-          },
+          itemBuilder: (context, index) => _buildActivityListItem(activity: _recentActivities[index]),
         ),
       ],
     );
   }
 
-  // Activity Item
-  Widget _buildActivityListItem(BuildContext context, {required Map<String, String> activity}) {
+  Widget _buildActivityListItem({required Map<String, String> activity}) {
     return Container(
-    margin: const EdgeInsets.only(bottom: 8),
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    decoration: BoxDecoration(
-      color: const Color(0xFF395668),
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          activity['title'] ?? '',
-          style: const TextStyle(fontSize: 14, color: Colors.white),
-        ),
-        Text(
-          activity['date'] ?? '',
-          style: const TextStyle(fontSize: 12, color: Colors.white70),
-        ),
-      ],
-    ),
-  );
-}
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFF395668),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(activity['title'] ?? '', style: const TextStyle(fontSize: 14, color: Colors.white)),
+          Text(activity['date'] ?? '', style: const TextStyle(fontSize: 12, color: Colors.white70)),
+        ],
+      ),
+    );
+  }
 
-  // Bottom Navigation Bar
-  Widget _buildBottomNavigationBar(BuildContext context) {
+  Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
-      backgroundColor: const Color(0xFF2A4759), // Match the overall background
+      backgroundColor: const Color(0xFF2A4759),
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white70,
-      type: BottomNavigationBarType.fixed, // Ensure labels are always visible
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
-          label: 'Activities',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.local_activity), label: 'Activities'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
       ],
       onTap: (index) {
-        // Handle bottom navigation item taps
-        if (index == 0) {
-          // Navigate to home
-        } else if (index == 1) {
-          // Navigate to activities
-        } else if (index == 2) {
-          // Navigate to profile
-        }
+        // Handle bottom navigation
       },
     );
   }
 }
-
-
-
-
