@@ -67,13 +67,21 @@ flutter:
     - assets/images/
 
   fonts:
-    - family: RogueScript
-      fonts:
-        - asset: assets/fonts/RougeScript-Regular.ttf
+  - family: RogueScript
+    fonts:
+      - asset: assets/fonts/RougeScript-Regular.ttf
 
-    - family: AbrilFatface
-      fonts:
-        - asset: assets/fonts/AbrilFatface-Regular.ttf
+  - family: AbrilFatface
+    fonts:
+      - asset: assets/fonts/AbrilFatface-Regular.ttf
+
+  - family: Lato
+    fonts:
+      - asset: assets/fonts/Lato-Regular.ttf
+
+  - family: OpenSans
+    fonts:
+      - asset: assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf
 
 
 

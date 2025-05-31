@@ -35,17 +35,17 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           bodyMedium: TextStyle(
             color: Colors.white70,
-            fontFamily: 'AbrilFatface', // Set global font
+            fontFamily: 'OpenSans', // Set global font
           ),
           titleLarge: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            fontFamily: 'AbrilFatface', // Set global font
+            fontFamily: 'OpenSans', // Set global font
           ),
           bodySmall: TextStyle(
             color: Colors.white60,
-            fontFamily: 'AbrilFatface', // Set global font
+            fontFamily: 'OpenSans', // Set global font
           ),
         ),
       ),

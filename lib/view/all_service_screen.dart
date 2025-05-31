@@ -1,10 +1,9 @@
 // lib/view/all_services_screen.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:motofix_app/view/home_screen.dart';// For date formatting in ServiceDetailScreen if you kept it there
+import 'package:motofix_app/view/home_screen.dart'; // Ensure HomeScreen is imported for AppColors
 
 // Comprehensive list of services for AllServicesScreen
-// This list can be moved to a separate data file if it grows extensively.
 final List<Map<String, dynamic>> _allAvailableServices = [
   {'title': 'Oil Servicing', 'price': 'Rs. 1000', 'icon': FontAwesomeIcons.oilCan, 'description': 'Complete engine oil and filter change for optimal performance.'},
   {'title': 'Tire Replacement', 'price': 'Rs. 2500', 'icon': FontAwesomeIcons.solidCircleDot, 'description': 'Professional tire replacement and balancing for safety.'},
@@ -23,9 +22,9 @@ final List<Map<String, dynamic>> _allAvailableServices = [
   {'title': 'Spark Plug Replacement', 'price': 'Rs. 900', 'icon': FontAwesomeIcons.bolt, 'description': 'Replacement of spark plugs for improved engine ignition and fuel efficiency.'},
 ];
 
-
 class AllServicesScreen extends StatefulWidget {
-  const AllServicesScreen({super.key, required Map<String, dynamic> service});
+  final Map<String, dynamic> service; // Keep the service parameter for compatibility
+  const AllServicesScreen({super.key, required this.service});
 
   @override
   State<AllServicesScreen> createState() => _AllServicesScreenState();
@@ -113,7 +112,7 @@ class _AllServicesScreenState extends State<AllServicesScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AllServicesScreen(service: service),
+            builder: (context) => ServiceDetailScreen(service: service),
           ),
         );
       },
@@ -180,7 +179,7 @@ class _AllServicesScreenState extends State<AllServicesScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AllServicesScreen(service: service),
+            builder: (context) => ServiceDetailScreen(service: service),
           ),
         );
       },
@@ -230,6 +229,93 @@ class _AllServicesScreenState extends State<AllServicesScreen> {
                     style: const TextStyle(fontSize: 14, color: AppColors.accentGreen, fontWeight: FontWeight.bold),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Placeholder ServiceDetailScreen (to be customized as needed)
+class ServiceDetailScreen extends StatelessWidget {
+  final Map<String, dynamic> service;
+
+  const ServiceDetailScreen({super.key, required this.service});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.primaryDark,
+      appBar: AppBar(
+        title: Text(
+          service['title'] ?? 'Service Details',
+          style: const TextStyle(
+            color: AppColors.textWhite,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+        backgroundColor: AppColors.primaryDark,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: AppColors.textWhite),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Icon(
+                service['icon'] as IconData?,
+                size: 60,
+                color: AppColors.accentBlue,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              service['title'] ?? '',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textWhite,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              service['description'] ?? '',
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.textWhite70,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Price: ${service['price'] ?? ''}',
+              style: const TextStyle(
+                fontSize: 18,
+                color: AppColors.accentGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                print('Book ${service['title']} tapped');
+                // TODO: Implement booking flow
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.accentBlue,
+                foregroundColor: AppColors.textWhite,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Book Now',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ],
