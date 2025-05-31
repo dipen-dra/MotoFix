@@ -48,6 +48,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   url_launcher: ^6.0.12
+  font_awesome_flutter: ^10.4.0
+  # geolocator: ^11.0.0 # Or the latest version
+  # geocoding: ^2.1.1 
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -61,7 +64,26 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/images/
+
+  fonts:
+  - family: RogueScript
+    fonts:
+      - asset: assets/fonts/RougeScript-Regular.ttf
+
+  - family: AbrilFatface
+    fonts:
+      - asset: assets/fonts/AbrilFatface-Regular.ttf
+
+  - family: Lato
+    fonts:
+      - asset: assets/fonts/Lato-Regular.ttf
+
+  - family: OpenSans
+    fonts:
+      - asset: assets/fonts/OpenSans-VariableFont_wdth,wght.ttf
+
+
 
 
   # To add assets to your application, add an assets section, like this:
