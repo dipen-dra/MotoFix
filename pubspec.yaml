@@ -66,6 +66,17 @@ flutter:
   assets:
     - assets/images/
 
+  fonts:
+    - family: RogueScript
+      fonts:
+        - asset: assets/fonts/RougeScript-Regular.ttf
+
+    - family: AbrilFatface
+      fonts:
+        - asset: assets/fonts/AbrilFatface-Regular.ttf
+
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

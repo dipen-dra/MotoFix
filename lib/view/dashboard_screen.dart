@@ -1,7 +1,6 @@
 // lib/view/dashboard_view.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 // Import the new screen files
 import 'package:motofix_app/view/home_screen.dart';
 import 'package:motofix_app/view/activities_screen.dart';
@@ -63,7 +62,7 @@ class _MotoFixDashboardState extends State<MotoFixDashboard> {
           icon: Icon(Icons.local_activity),
           label: 'Activities',
         ),
-        BottomNavigationBarItem(
+        BottomNavigationBarItem( 
           icon: Icon(FontAwesomeIcons.history), // Using FontAwesome for history
           label: 'History',
         ),
