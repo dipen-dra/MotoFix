@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motofix_app/features/splash/splash_page.dart';
+import 'package:motofix_app/view/dashboard_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const SplashPage(),
+      home: const MotoFixDashboard(),
     );
   }
 }
