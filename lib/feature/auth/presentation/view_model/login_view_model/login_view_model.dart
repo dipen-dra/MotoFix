@@ -1,83 +1,94 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:motofix_app/feature/auth/domain/use_case/login_use_case.dart';
-// import 'package:motofix_app/feature/auth/presentation/view/signup_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motofix_app/core/common/snack_bar.dart';
+import 'package:motofix_app/feature/auth/domain/use_case/login_use_case.dart';
+import 'package:motofix_app/feature/auth/presentation/view/signup_page.dart';
+import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:motofix_app/view/dashboard_screen.dart';
 
+import '../../../../../app/service_locator/service_locator.dart';
+import 'login_event.dart';
+import 'login_state.dart';
 
-// import '../../../../../app/service_locator/service_locator.dart';
-// import '../register_view_model/register_view_model.dart';
-// import 'login_event.dart';
-// import 'login_state.dart';
+class LoginViewModel extends Bloc<LoginEvent, LoginState> {
+  final UserLoginUseCase _userLoginUseCase;
 
-// class LoginViewModel extends Bloc<LoginEvent, LoginState> {
-//   final UserLoginUseCase _userLoginUseCase;
+  LoginViewModel(this._userLoginUseCase) : super(LoginState.initial()) {
+    on<NavigateToRegisterView>(_onNavigateToRegisterView);
+    on<LoginWithEmailAndPassword>(_onLoginWithEmailAndPassword);
+    on<NavigateToHomeView>(_onNavigateToHomeView);
+  }
 
-//   LoginViewModel(this._userLoginUseCase) : super(LoginState.initial()) {
-//     on<NavigateToRegisterView>(_onNavigateToRegisterView);
-//     // on<NavigateToHomeView>(_onNavigateToHomeView);
-//     // on<LoginWithEmailAndPassword>(_onLoginWithEmailAndPassword);
-//   }
+  void _onNavigateToRegisterView(
+      NavigateToRegisterView event,
+      Emitter<LoginState> emit,
+      ) {
+    if (event.context.mounted) {
+      Navigator.push(
+        event.context,
+        MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: serviceLocator<RegisterViewModel>(),
+            child: const SignUpPage(),
+          ),
+        ),
+      );
+    }
+  }
 
-//   void _onNavigateToRegisterView(
-//     NavigateToRegisterView event,
-//     Emitter<LoginState> emit,
-//   ) {
-//     if (event.context.mounted) {
-//       Navigator.push(
-//         event.context,
-//         MaterialPageRoute(
-//           builder:
-//               (_) => BlocProvider.value(
-//                 value: serviceLocator<RegisterViewModel>(),
-//                 child: const SignUpPage(),
-//               ),
-//         ),
-//       );
-//     }
-//   }
+  void _onNavigateToHomeView(
+      NavigateToHomeView event,
+      Emitter<LoginState> emit,
+      ) {
+    if (event.context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        event.context,
+        MaterialPageRoute(
+          builder: (_) => const MotoFixDashboard(),
+        ),
+            (route) => false,
+      );
+    }
+  }
 
-//   // void _onNavigateToHomeView(
-//   //   NavigateToHomeView event,
-//   //   Emitter<LoginState> emit,
-//   // ) async {
-//   //   Navigator.pushAndRemoveUntil(
-//   //     event.context,
-//   //     MaterialPageRoute(
-//   //       builder:
-//   //           (_) => BlocProvider(
-//   //             create: (_) => BottomNavigationCubit(),
-//   //             child: DashboardView(showSnackbar: true),
-//   //           ),
-//   //     ),
-//   //     (route) => false,
-//   //   );
-//   // }
+  void _onLoginWithEmailAndPassword(
+      LoginWithEmailAndPassword event,
+      Emitter<LoginState> emit,
+      ) async {
+    emit(state.copyWith(isLoading: true));
 
-// //   void _onLoginWithEmailAndPassword(
-// //     LoginWithEmailAndPassword event,
-// //     Emitter<LoginState> emit,
-// //   ) async {
-// //     emit(state.copyWith(isLoading: true));
-// //     final result = await _userLoginUseCase(
-// //       LoginParams(email: event.email, password: event.password),
-// //     );
+    final result = await _userLoginUseCase(
+      LoginParams(email: event.email, password: event.password),
+    );
 
-// //     result.fold(
-// //       (failure) {
-// //         // Handle failure case
-// //         emit(state.copyWith(isLoading: false, isSuccess: false));
+    result.fold(
+          (failure) {
+        emit(state.copyWith(isLoading: false, isSuccess: false));
 
-// //         showMySnackBar(
-// //           context: event.context,
-// //           message: 'Invalid credentials. Please try again.',
-// //           color: Colors.red,
-// //         );
-// //       },
-// //       (email) {
-// //         // Handle success case
-// //         emit(state.copyWith(isLoading: false, isSuccess: true));
-// //         add(NavigateToHomeView(context: event.context));
-// //       },
-// //     );
-// //   }
-// // }
+        if (event.context.mounted) {
+          showMySnackBar(
+            context: event.context,
+            message: 'Invalid credentials. Please try again.',
+            color: Colors.red,
+          );
+        }
+      },
+          (email) {
+        emit(state.copyWith(isLoading: false, isSuccess: true));
+
+        if (event.context.mounted) {
+          showMySnackBar(
+            context: event.context,
+            message: 'Login successful!',
+            color: Colors.green,
+          );
+
+          // Delay to allow the snackbar to be visible before navigation
+          Future.delayed(const Duration(milliseconds: 600), () {
+            add(NavigateToHomeView(context: event.context));
+          });
+        }
+      },
+    );
+  }
+}

@@ -3,12 +3,11 @@ import 'package:motofix_app/app/constant/hive_constant_table.dart';
 import 'package:motofix_app/feature/auth/data/model/user_hive_model.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class HiveService {
   Future<void> init() async {
     final directory = await getApplicationDocumentsDirectory();
     Hive.init(directory.path);
-    // Hive.registerAdapter(UserHiveModelAdapter());
+    Hive.registerAdapter(UserHiveModelAdapter());
   }
 
   //   ================ user queries =============

@@ -11,7 +11,6 @@ class NavigateToLoginEvent extends RegisterEvent {
 
 class RegisterUserEvent extends RegisterEvent {
   final BuildContext context;
-
   final String name;
   final String password;
   final String email;
