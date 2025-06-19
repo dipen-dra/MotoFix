@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:motofix_app/features/auth/signin_page.dart';
+import 'package:motofix_app/feature/auth/presentation/view/signin_page.dart';
+
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

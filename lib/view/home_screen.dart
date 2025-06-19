@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motofix_app/view/all_service_screen.dart';
+import 'package:flutter/cupertino.dart';
 
 // --- Global Theme & Data (could be in separate files) ---
 
@@ -48,9 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> _searchResults = []; // State to hold search results
 
   // Dummy vehicle data
-  String _currentVehicle = 'Honda Civic (AB 123 CD)';
-  String _nextServiceDate = '2025-08-15';
-  double _serviceProgress = 0.75; // 75% complete towards next service
+  final String _currentVehicle = 'Honda Civic (AB 123 CD)';
+  final String _nextServiceDate = '2025-08-15';
+  final double _serviceProgress = 0.75; // 75% complete towards next service
 
   @override
   void initState() {
