@@ -10,39 +10,37 @@ class UserHiveModel extends HiveObject {
   final String userId;
 
   @HiveField(1)
-  final String name;
+  final String fullName;
 
   @HiveField(2)
   final String email;
 
   @HiveField(3)
   final String password;
-
-  @HiveField(4)
-  final String phone;
+  
 
   UserHiveModel({
     String? userId,
-    required this.name,
+    required this.fullName,
 
     required this.email,
     required this.password,
-    required this.phone,
+
   }) : userId = userId ?? const Uuid().v4();
 
   UserEntity toEntity() => UserEntity(
     userId: userId,
-    name: name,
+    fullName: fullName,
     email: email,
     password: password,
-    phone: phone,
+
   );
 
   factory UserHiveModel.fromEntity(UserEntity entity) => UserHiveModel(
     userId: entity.userId,
-    name: entity.name,
+    fullName: entity.fullName,
     email: entity.email,
     password: entity.password,
-    phone: entity.phone,
+
   );
 }

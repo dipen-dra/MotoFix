@@ -18,7 +18,7 @@ class HiveService {
 
   Future<List<UserHiveModel>> getAllUsers() async {
     final box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
-    return box.values.toList()..sort((a, b) => a.name.compareTo(b.name));
+    return box.values.toList()..sort((a, b) => a.fullName.compareTo(b.fullName));
   }
 
   Future<void> deleteUser(String id) async {
