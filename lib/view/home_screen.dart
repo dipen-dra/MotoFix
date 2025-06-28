@@ -512,20 +512,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: AppColors.textWhite,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                print('See all services tapped');
-                // Navigate to AllServicesScreen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AllServicesScreen(service: {})),
-                );
-              },
-              child: const Text(
-                'See all',
-                style: TextStyle(color: AppColors.accentBlue, fontSize: 15),
-              ),
-            ),
+            // TextButton(
+            //   onPressed: () {
+            //     print('See all services tapped');
+            //     // Navigate to AllServicesScreen
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const ActivitiesScreen(service: {})),
+            //     );
+            //   },
+            //   child: const Text(
+            //     'See all',
+            //     style: TextStyle(color: AppColors.accentBlue, fontSize: 15),
+            //   ),
+            // ),
           ],
         ),
         SizedBox(height: screenHeight * 0.02),

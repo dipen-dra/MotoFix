@@ -1,11 +1,16 @@
 // lib/view/dashboard_view.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:motofix_app/feature/service/presentation/view/booking_view.dart';
+import 'package:motofix_app/feature/service/presentation/view_model/booking_view_model.dart';
 // Import the new screen files
 import 'package:motofix_app/view/home_screen.dart';
 import 'package:motofix_app/view/activities_screen.dart';
 import 'package:motofix_app/view/history_screen.dart';
 import 'package:motofix_app/view/profile_screen.dart';
+
+import '../app/service_locator/service_locator.dart';
 
 class MotoFixDashboard extends StatefulWidget {
   const MotoFixDashboard({super.key});
@@ -18,11 +23,15 @@ class _MotoFixDashboardState extends State<MotoFixDashboard> {
   int _selectedIndex = 0; // Manages the current selected tab
 
   // List of widgets (screens) to display for each navigation item
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(), // Your main home content
-    ActivitiesScreen(),
-    HistoryScreen(),
-    ProfileScreen(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const HomeScreen(),
+
+    BlocProvider<BookingViewModel>.value(
+      value: serviceLocator<BookingViewModel>(),
+      child: const BookingView(),
+    ),
+    const HistoryScreen(),
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

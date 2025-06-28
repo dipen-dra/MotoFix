@@ -15,7 +15,7 @@ UserApiModel _$UserApiModelFromJson(Map<String, dynamic> json) => UserApiModel(
 
 Map<String, dynamic> _$UserApiModelToJson(UserApiModel instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      if (instance.id case final value?) '_id': value,
       'fullName': instance.fullName,
       'email': instance.email,
       'password': instance.password,

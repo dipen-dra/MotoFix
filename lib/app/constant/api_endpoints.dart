@@ -16,6 +16,9 @@ class ApiEndpoints {
   static const String register = "auth/register";
 
   // ========== trails =======
-  static const String getAllTrails = "/trail";
-  static const String createTrail = '/trail';
+  static const String getAllBooking = "/user/bookings";
+  static const String createBooking = '/user/bookings';
+
+  static const String deleteBooking = 'user/bookings/:id' ;
+  static const String updateBooking = 'user/bookings/:id' ;
 }
