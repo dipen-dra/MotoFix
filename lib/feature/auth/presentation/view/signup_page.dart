@@ -17,11 +17,10 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  String _fullPhoneNumber = "";
+
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _termsAgreed = false;
@@ -30,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
+
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -51,9 +50,9 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState!.validate()) {
       context.read<RegisterViewModel>().add(
             RegisterUserEvent(
-              name: _nameController.text.trim(),
+              fullName: _nameController.text.trim(),
               email: _emailController.text.trim(),
-              phone: _fullPhoneNumber,
+
               password: _passwordController.text,
               context: context,
             ),
@@ -182,25 +181,25 @@ class _SignUpPageState extends State<SignUpPage> {
                       const SizedBox(height: 20),
 
                       // Phone Number
-                      IntlPhoneField(
-                        controller: _phoneController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: _inputDecoration(
-                                label: 'Phone Number', icon: Icons.phone)
-                            .copyWith(
-                          counterText: '',
-                        ),
-                        initialCountryCode: 'NP',
-                        dropdownTextStyle: const TextStyle(color: Colors.white),
-                        dropdownIcon: const Icon(Icons.arrow_drop_down,
-                            color: Colors.white),
-                        onChanged: (phone) =>
-                            _fullPhoneNumber = phone.completeNumber,
-                        validator: (phone) => (phone?.number ?? '').isEmpty
-                            ? 'Please enter a phone number'
-                            : null,
-                      ),
-                      const SizedBox(height: 20),
+                      // IntlPhoneField(
+                      //   controller: _phoneController,
+                      //   style: const TextStyle(color: Colors.white),
+                      //   decoration: _inputDecoration(
+                      //           label: 'Phone Number', icon: Icons.phone)
+                      //       .copyWith(
+                      //     counterText: '',
+                      //   ),
+                      //   initialCountryCode: 'NP',
+                      //   dropdownTextStyle: const TextStyle(color: Colors.white),
+                      //   dropdownIcon: const Icon(Icons.arrow_drop_down,
+                      //       color: Colors.white),
+                      //   onChanged: (phone) =>
+                      //       _fullPhoneNumber = phone.completeNumber,
+                      //   validator: (phone) => (phone?.number ?? '').isEmpty
+                      //       ? 'Please enter a phone number'
+                      //       : null,
+                      // ),
+                      // const SizedBox(height: 20),
 
                       // Password
                       TextFormField(

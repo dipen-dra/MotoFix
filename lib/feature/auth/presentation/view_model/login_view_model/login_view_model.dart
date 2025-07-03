@@ -6,6 +6,7 @@ import 'package:motofix_app/feature/auth/presentation/view/signup_page.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
 import 'package:motofix_app/view/dashboard_screen.dart';
 
+import '../../../../../app/cubit/bottom_navigation_cubit.dart';
 import '../../../../../app/service_locator/service_locator.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -36,19 +37,37 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     }
   }
 
+  // void _onNavigateToHomeView(
+  //     NavigateToHomeView event,
+  //     Emitter<LoginState> emit,
+  //     ) {
+  //   if (event.context.mounted) {
+  //     Navigator.pushAndRemoveUntil(
+  //       event.context,
+  //       MaterialPageRoute(
+  //         builder: (_) => const MotoFixDashboard(),
+  //       ),
+  //           (route) => false,
+  //     );
+  //   }
+  // }
+
   void _onNavigateToHomeView(
       NavigateToHomeView event,
       Emitter<LoginState> emit,
-      ) {
-    if (event.context.mounted) {
-      Navigator.pushAndRemoveUntil(
-        event.context,
-        MaterialPageRoute(
-          builder: (_) => const MotoFixDashboard(),
+      ) async {
+    // This navigation logic is perfect for your goal.
+    Navigator.pushAndRemoveUntil(
+      event.context,
+      MaterialPageRoute(
+        // It provides the BottomNavigationCubit to the DashboardView
+        builder: (_) => BlocProvider(
+          create: (_) => BottomNavigationCubit(),
+          child: const MotoFixDashboard(), // Navigates to the main dashboard
         ),
-            (route) => false,
-      );
-    }
+      ),
+          (route) => false, // Clears the navigation stack
+    );
   }
 
   void _onLoginWithEmailAndPassword(
