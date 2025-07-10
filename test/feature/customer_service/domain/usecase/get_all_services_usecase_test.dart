@@ -5,7 +5,7 @@ import 'package:motofix_app/core/error/failure.dart';
 import 'package:motofix_app/feature/customer_service/domain/entity/service_entity.dart';
 import 'package:motofix_app/feature/customer_service/domain/usecase/get_all_services_usecase.dart';
 import 'repository_mock.dart';
-import '../../token_mock.dart';
+import 'token_mock.dart';
 
 void main() {
   late MockServiceRepository repository;
