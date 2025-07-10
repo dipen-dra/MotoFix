@@ -185,7 +185,7 @@ Future<void> _initServiceModule() async {
             tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
     ),
   );
-  serviceLocator.registerLazySingleton(
+  serviceLocator.registerFactory<ServiceViewModel>(
         () => ServiceViewModel(
       getAllServicesUsecase: serviceLocator<GetAllServicesUsecase>(),
     ),

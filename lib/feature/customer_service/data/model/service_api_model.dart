@@ -7,17 +7,18 @@ part 'service_api_model.g.dart';
 class ServiceApiModel extends Equatable {
   @JsonKey(name : '_id')
   final String? serviceId ;
+
   final String name ;
   final String description ;
   final double price ;
-  final String duration ;
+  final String? duration ;
 
   ServiceApiModel({
     this.serviceId ,
     required this.name ,
     required this.description ,
     required this.price ,
-    required this.duration ,
+    this.duration ,
   }) ;
 
   @override
@@ -36,8 +37,13 @@ class ServiceApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$ServiceApiModelToJson(this);
 
-  ServiceEntity toEntity(){
-    return ServiceEntity(name: name, description: description, price: price, duration: duration) ;
+  ServiceEntity toEntity() {
+    return ServiceEntity(
+      name: name ?? 'Unnamed Service',
+      description: description ?? 'No description available.',
+      price: price ?? 0.0, // Provide a default
+      duration: duration ?? 'N/A',
+    );
   }
 
   static ServiceEntity fromEntity(ServiceEntity entity){

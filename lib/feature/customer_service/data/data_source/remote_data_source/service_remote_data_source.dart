@@ -17,11 +17,10 @@ class ServiceRemoteDataSource implements IServiceDataSource {
   Future<List<ServiceEntity>> getService(String? token) async {
     try {
       final response = await _apiService.dio.get(
-        '${ApiEndpoints.getAllServices}' ,
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        ApiEndpoints.getAllServices
       ) ;
-      print("Response service : ${response.data}") ;
 
+      print('Service remote data source $response') ;
       if(response.statusCode == 200){
         GetAllServiceDto getAllServiceDto = GetAllServiceDto.fromJson(response.data) ;
 

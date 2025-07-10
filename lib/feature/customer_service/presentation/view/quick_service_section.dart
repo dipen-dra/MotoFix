@@ -31,10 +31,16 @@ class QuickServicesSection extends StatelessWidget {
                 case ServiceStatus.failure:
                   return _buildServiceErrorState(context);
                 case ServiceStatus.success:
+                // DEBUG PRINT: This will confirm if the UI receives the data.
+                  print("UI BUILDER: Received success state with ${state.services.length} services.");
+
                   if (state.services.isEmpty) {
                     return _buildEmptyServicesState();
                   }
+
+                  // Display up to 5 services on the home screen.
                   final homeScreenServices = state.services.take(5).toList();
+
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
@@ -51,7 +57,6 @@ class QuickServicesSection extends StatelessWidget {
       ],
     );
   }
-
   Widget _buildHeader(BuildContext context) {
     return BlocBuilder<ServiceViewModel, ServiceState>(
       builder: (context, state) {
@@ -144,29 +149,23 @@ class QuickServicesSection extends StatelessWidget {
   }
 
   Widget _buildServiceErrorState(BuildContext context) {
-    // ... (Keep the existing implementation)
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      width: double.infinity, padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(color: AppColors.cardBackground, borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(FontAwesomeIcons.triangleExclamation, color: Colors.redAccent, size: 25),
-          const SizedBox(height: 12),
-          const Text('Failed to load services', style: TextStyle(color: AppColors.textWhite, fontSize: 16, fontWeight: FontWeight.w500)),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () => context.read<ServiceViewModel>().add(GetAllServicesEvent()),
-            child: const Text('Try Again', style: TextStyle(color: AppColors.accentBlue, fontSize: 14, fontWeight: FontWeight.w600)),
-          ),
-        ],
-      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Icon(FontAwesomeIcons.triangleExclamation, color: Colors.redAccent, size: 25),
+        const SizedBox(height: 12),
+        const Text('Failed to load services', style: TextStyle(color: AppColors.textWhite, fontSize: 16, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        TextButton(
+          onPressed: () => context.read<ServiceViewModel>().add(GetAllServicesEvent()),
+          child: const Text('Try Again', style: TextStyle(color: AppColors.accentBlue, fontSize: 14, fontWeight: FontWeight.w600)),
+        ),
+      ]),
     );
   }
 
   Widget _buildEmptyServicesState() {
-    // ... (Keep the existing implementation)
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -183,7 +182,6 @@ class QuickServicesSection extends StatelessWidget {
   }
 
   Widget _buildServiceItem({required BuildContext context, required ServiceEntity service}) {
-    // ... (Keep the existing implementation)
     return GestureDetector(
       onTap: () => _onServiceTap(context, service),
       child: Container(
@@ -209,7 +207,7 @@ class QuickServicesSection extends StatelessWidget {
               children: [
                 Text(service.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textWhite), maxLines: 2, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
-                Text(service.duration, style: const TextStyle(fontSize: 12, color: AppColors.textWhite70), maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(service.duration ?? 'N/A', style: const TextStyle(fontSize: 12, color: AppColors.textWhite70), maxLines: 1, overflow: TextOverflow.ellipsis),
               ],
             ),
             Row(
@@ -249,7 +247,7 @@ class QuickServicesSection extends StatelessWidget {
           children: [
             _buildServiceDetailRow('Description', service.description),
             const SizedBox(height: 12),
-            _buildServiceDetailRow('Duration', service.duration),
+            _buildServiceDetailRow('Duration', service.duration ?? 'N/A'),
             const SizedBox(height: 12),
             _buildServiceDetailRow('Price', 'Rs. ${service.price.toStringAsFixed(0)}'),
           ],

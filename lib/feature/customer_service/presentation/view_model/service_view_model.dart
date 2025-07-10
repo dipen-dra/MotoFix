@@ -30,14 +30,11 @@ class ServiceViewModel extends Bloc<ServiceEvent, ServiceState> {
 
     result.fold(
           (failure) {
-
         emit(state.copyWith(
           status: ServiceStatus.failure,
 
         ));
-      },
-          (serviceList) {
-        // On success, emit a success state with the list of services
+      }, (serviceList) {
         emit(state.copyWith(
           status: ServiceStatus.success,
           services: serviceList,
