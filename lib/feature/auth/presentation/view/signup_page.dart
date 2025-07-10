@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/egister_event.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_state.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
@@ -19,7 +18,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -52,7 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
             RegisterUserEvent(
               fullName: _nameController.text.trim(),
               email: _emailController.text.trim(),
-
               password: _passwordController.text,
               context: context,
             ),

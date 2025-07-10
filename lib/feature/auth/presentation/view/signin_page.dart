@@ -69,10 +69,6 @@ class _SignInPageState extends State<SignInPage> {
         // and to rebuild the UI when the state changes.
         child: BlocConsumer<LoginViewModel, LoginState>(
           listener: (context, state) {
-            // The listener is the perfect place for "side effects" that shouldn't
-            // happen during a build, like navigation or showing a SnackBar.
-            // Note: Navigation is now handled by the ViewModel emitting events,
-            // which keeps the view cleaner. The snackbar is also shown from the view model.
           },
           builder: (context, state) {
             return GestureDetector(
@@ -267,9 +263,7 @@ class _SignInPageState extends State<SignInPage> {
                             children: [
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    /* TODO: Implement Facebook Sign In */
-                                  },
+                                  onPressed: () {},
                                   icon: const Icon(Icons.facebook),
                                   label: const Text("Facebook"),
                                   style: ElevatedButton.styleFrom(
@@ -286,9 +280,7 @@ class _SignInPageState extends State<SignInPage> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    /* TODO: Implement Google Sign In */
-                                  },
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     foregroundColor: Colors.black,
