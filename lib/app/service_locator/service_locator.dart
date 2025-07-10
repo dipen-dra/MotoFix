@@ -10,6 +10,11 @@ import 'package:motofix_app/feature/auth/domain/use_case/login_use_case.dart';
 import 'package:motofix_app/feature/auth/domain/use_case/register_use_case.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:motofix_app/feature/customer_service/data/data_source/remote_data_source/service_remote_data_source.dart';
+import 'package:motofix_app/feature/customer_service/data/dto/get_all_service_dto.dart';
+import 'package:motofix_app/feature/customer_service/data/repository/remote_repository/service_remote_repository.dart';
+import 'package:motofix_app/feature/customer_service/domain/usecase/get_all_services_usecase.dart';
+import 'package:motofix_app/feature/customer_service/presentation/view_model/service_view_model.dart';
 import 'package:motofix_app/feature/service/data/data_source/remote_data_source/remote_booking_data_source.dart';
 import 'package:motofix_app/feature/service/data/repository/remote_repository/booking_remote_repository.dart';
 import 'package:motofix_app/feature/service/domain/use_case/create_user_bookings.dart';
@@ -29,6 +34,7 @@ Future initDependencies() async {
   await _initApiService() ;
   await _initBookingModule() ;
   await _initSharedPrefs() ;
+  await _initServiceModule() ;
 
 }
 
@@ -155,4 +161,34 @@ Future<void> _initAuthModule() async {
       ),
     );
   }
+
+Future<void> _initServiceModule() async {
+
+
+  serviceLocator.registerFactory(
+        () => ServiceRemoteDataSource(apiService: serviceLocator<ApiService>()),
+  );
+
+  // Repository
+
+
+  serviceLocator.registerFactory<ServiceRemoteRepository>(
+        () => ServiceRemoteRepository(
+      serviceRemoteDataSource: serviceLocator<ServiceRemoteDataSource>(),
+    ),
+  );
+
+  // Usecases
+  serviceLocator.registerFactory(
+        () => GetAllServicesUsecase(
+      serviceRepository: serviceLocator<ServiceRemoteRepository>(),
+            tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+  serviceLocator.registerLazySingleton(
+        () => ServiceViewModel(
+      getAllServicesUsecase: serviceLocator<GetAllServicesUsecase>(),
+    ),
+  );
+}
 

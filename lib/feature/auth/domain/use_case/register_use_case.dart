@@ -43,7 +43,6 @@ class UserRegisterUseCase
       fullName: params.fullName,
       email: params.email,
       password: params.password,
-
     );
 
     return _userRepository.registerUser(userEntity);

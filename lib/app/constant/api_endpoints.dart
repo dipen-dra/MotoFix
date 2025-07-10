@@ -15,10 +15,14 @@ class ApiEndpoints {
   static const String login = "auth/login";
   static const String register = "auth/register";
 
-  // ========== trails =======
+  // ========== booking =======
   static const String getAllBooking = "/user/bookings";
   static const String createBooking = '/user/bookings';
 
   static const String deleteBooking = 'user/bookings/:id' ;
   static const String updateBooking = 'user/bookings/:id' ;
+
+
+  //services
+  static const String getAllServices = '/user/services' ;
 }
