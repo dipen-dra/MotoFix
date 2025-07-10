@@ -2,13 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
 
 import 'package:motofix_app/feature/customer_service/presentation/view_model/service_view_model.dart';
 import 'package:motofix_app/feature/service/presentation/view/booking_view.dart';
 import 'package:motofix_app/feature/service/presentation/view_model/booking_view_model.dart';
 import 'package:motofix_app/view/home_screen.dart';
 import 'package:motofix_app/view/history_screen.dart';
-import 'package:motofix_app/view/profile_screen.dart';
+import 'package:motofix_app/feature/auth/presentation/view/profile_screen.dart';
 
 import '../app/cubit/bottom_navigation_cubit.dart';
 import '../app/service_locator/service_locator.dart';
@@ -21,7 +22,7 @@ class MotoFixDashboard extends StatelessWidget {
     const HomeScreen(),
     const BookingView(), // No longer needs a local provider
     const HistoryScreen(),
-    const ProfileScreen(),
+    const ProfileViewPage(),
   ];
 
   @override
@@ -41,6 +42,8 @@ class MotoFixDashboard extends StatelessWidget {
         BlocProvider<BookingViewModel>.value(
           value: serviceLocator<BookingViewModel>(),
         ),
+
+        BlocProvider<ProfileViewModel>.value(value: serviceLocator<ProfileViewModel>()) ,
       ],
       // The child is a builder that listens to navigation changes
       child: BlocBuilder<BottomNavigationCubit, int>(

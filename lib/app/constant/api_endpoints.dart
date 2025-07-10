@@ -22,7 +22,8 @@ class ApiEndpoints {
   static const String deleteBooking = 'user/bookings/:id' ;
   static const String updateBooking = 'user/bookings/:id' ;
 
-
   //services
   static const String getAllServices = '/user/services' ;
+ //profile
+  static const String userProfile = "user/profile";
 }

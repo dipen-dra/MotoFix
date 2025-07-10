@@ -14,6 +14,7 @@ class TokenSharedPrefs {
     try {
       await _sharedPreferences.setString('token', token);
       return Right(null);
+
     } catch (e) {
       return Left(
         SharedPreferencesFailure(message: 'Failed to  save token $e'),

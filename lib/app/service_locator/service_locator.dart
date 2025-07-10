@@ -22,6 +22,10 @@ import 'package:motofix_app/feature/service/domain/use_case/delete_user_bookings
 import 'package:motofix_app/feature/service/domain/use_case/get_user_bookings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../feature/auth/domain/use_case/user_delete_usecase.dart';
+import '../../feature/auth/domain/use_case/user_get_usecase.dart';
+import '../../feature/auth/domain/use_case/user_update_usecase.dart';
+import '../../feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
 import '../../feature/service/domain/repository/booking_repository.dart';
 import '../../feature/service/presentation/view_model/booking_view_model.dart';
 import '../shared_pref/token_shared_prefs.dart';
@@ -84,14 +88,35 @@ Future<void> _initAuthModule() async {
   serviceLocator.registerFactory(
         () =>
         UserLoginUseCase(
-            userRepository: serviceLocator<UserRemoteRepository>()),
+            userRepository: serviceLocator<UserRemoteRepository>(), tokenSharedPrefs: serviceLocator<TokenSharedPrefs>()),
   );
+
+
 
   serviceLocator.registerFactory(
         () =>
         UserRegisterUseCase(
           userRepository: serviceLocator<UserRemoteRepository>(),
         ),
+  );
+
+  serviceLocator.registerFactory(
+        () => UserGetUseCase(
+      iUserRepository: serviceLocator<UserRemoteRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+  serviceLocator.registerFactory(
+        () => UserUpdateUsecase(
+      iUserRepository: serviceLocator<UserRemoteRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+  serviceLocator.registerFactory(
+        () => UserDeleteUsecase(
+      iUserRepository: serviceLocator<UserRemoteRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
   );
 
   // ===================== ViewModels ====================
@@ -104,8 +129,15 @@ Future<void> _initAuthModule() async {
   serviceLocator.registerFactory(
         () => LoginViewModel(serviceLocator<UserLoginUseCase>()),
   );
-// }
-// }
+
+  serviceLocator.registerFactory(
+        () => ProfileViewModel(
+      userGetUseCase: serviceLocator<UserGetUseCase>(),
+      userUpdateUseCase: serviceLocator<UserUpdateUsecase>(),
+      userDeleteUsecase: serviceLocator<UserDeleteUsecase>(),
+    ),
+  );
+
 }
 // Future<void> _initHomeModule() async {
 //   serviceLocator.registerFactory(
