@@ -5,7 +5,6 @@ import 'package:motofix_app/core/error/failure.dart';
 import 'package:motofix_app/feature/auth/domain/entity/auth_entity.dart';
 import 'package:motofix_app/feature/auth/domain/repository/user_repository.dart';
 
-
 class RegisterUserParams extends Equatable {
   final String fullName;
   final String password;
@@ -15,18 +14,15 @@ class RegisterUserParams extends Equatable {
     required this.fullName,
     required this.password,
     required this.email,
-
   });
 
   const RegisterUserParams.initial({
     required this.fullName,
     required this.password,
     required this.email,
-
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [fullName, password, email];
 }
 
@@ -35,7 +31,7 @@ class UserRegisterUseCase
   final IUserRepository _userRepository;
 
   UserRegisterUseCase({required IUserRepository userRepository})
-    : _userRepository = userRepository;
+      : _userRepository = userRepository;
 
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
