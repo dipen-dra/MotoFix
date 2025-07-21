@@ -4,7 +4,6 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../app/constant/api_endpoints.dart';
 import 'dio_error_interceptor.dart';
 
-
 class ApiService {
   final Dio _dio;
 

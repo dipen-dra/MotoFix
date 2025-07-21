@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
+import 'package:motofix_app/feature/booking/presentation/view/create_booking.dart';
 
 import 'package:motofix_app/feature/customer_service/presentation/view_model/service_view_model.dart';
-import 'package:motofix_app/feature/service/presentation/view/booking_view.dart';
-import 'package:motofix_app/feature/service/presentation/view_model/booking_view_model.dart';
+
 import 'package:motofix_app/view/home_screen.dart';
 import 'package:motofix_app/view/history_screen.dart';
 import 'package:motofix_app/feature/auth/presentation/view/profile_screen.dart';
 
 import '../app/cubit/bottom_navigation_cubit.dart';
 import '../app/service_locator/service_locator.dart';
+import '../feature/booking/presentation/view/booking_view.dart';
+import '../feature/booking/presentation/view_model/booking_view_model.dart';
 
 class MotoFixDashboard extends StatelessWidget {
   const MotoFixDashboard({super.key});
@@ -27,7 +29,6 @@ class MotoFixDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // KEY CHANGE: Provide all BLoCs needed by the dashboard tabs here.
     return MultiBlocProvider(
       providers: [
         // A provider for our new navigation cubit

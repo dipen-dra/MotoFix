@@ -25,8 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Trigger the event to fetch services when the screen loads.
-    // This is the ideal place for it, as HomeScreen is the parent screen.
+
     context.read<ServiceViewModel>().add(GetAllServicesEvent());
   }
 
@@ -54,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 QuickServicesSection(),
                 SizedBox(height: 30),
                 RecentActivitySection(),
-                SizedBox(height: 20), // Add padding at the bottom
+                SizedBox(height: 20),
               ],
             ),
           ),

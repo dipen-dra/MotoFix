@@ -15,19 +15,20 @@ import 'package:motofix_app/feature/customer_service/data/dto/get_all_service_dt
 import 'package:motofix_app/feature/customer_service/data/repository/remote_repository/service_remote_repository.dart';
 import 'package:motofix_app/feature/customer_service/domain/usecase/get_all_services_usecase.dart';
 import 'package:motofix_app/feature/customer_service/presentation/view_model/service_view_model.dart';
-import 'package:motofix_app/feature/service/data/data_source/remote_data_source/remote_booking_data_source.dart';
-import 'package:motofix_app/feature/service/data/repository/remote_repository/booking_remote_repository.dart';
-import 'package:motofix_app/feature/service/domain/use_case/create_user_bookings.dart';
-import 'package:motofix_app/feature/service/domain/use_case/delete_user_bookings.dart';
-import 'package:motofix_app/feature/service/domain/use_case/get_user_bookings.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../feature/auth/domain/use_case/user_delete_usecase.dart';
 import '../../feature/auth/domain/use_case/user_get_usecase.dart';
 import '../../feature/auth/domain/use_case/user_update_usecase.dart';
 import '../../feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
-import '../../feature/service/domain/repository/booking_repository.dart';
-import '../../feature/service/presentation/view_model/booking_view_model.dart';
+import '../../feature/booking/data/data_source/remote_data_source/remote_booking_data_source.dart';
+import '../../feature/booking/data/repository/remote_repository/booking_remote_repository.dart';
+import '../../feature/booking/domain/repository/booking_repository.dart';
+import '../../feature/booking/domain/use_case/create_user_bookings.dart';
+import '../../feature/booking/domain/use_case/delete_user_bookings.dart';
+import '../../feature/booking/domain/use_case/get_user_bookings.dart';
+import '../../feature/booking/presentation/view_model/booking_view_model.dart';
 import '../shared_pref/token_shared_prefs.dart';
 
 final serviceLocator = GetIt.instance;
@@ -157,7 +158,7 @@ Future<void> _initAuthModule() async {
     //   ),
     // );
     serviceLocator.registerFactory<BookingRepository>(
-          () => serviceLocator<BookingRemoteRepository>(),
+          () => serviceLocator<BookingRepository>(),
     );
 
     // ===================== Use Cases ====================
@@ -181,28 +182,23 @@ Future<void> _initAuthModule() async {
     );
 
     serviceLocator.registerFactory(
-        () => CreateBookingUseCase(bookingRepository: serviceLocator<BookingRemoteRepository>()) ,
+        () => CreateBookingUseCase(bookingRepository: serviceLocator<BookingRemoteRepository>(), tokenSharedPrefs: serviceLocator<TokenSharedPrefs>()) ,
     ) ;
 
     // ===================== ViewModel (BLoC) ====================
     serviceLocator.registerFactory<BookingViewModel>(
           () => BookingViewModel(
         getUserBookingsUseCase: serviceLocator<GetUserBookings>(),
-        deleteBookingUseCase: serviceLocator<DeleteBookingUsecase>(),
-            createBookingUseCase: serviceLocator<CreateBookingUseCase>() ,
+        deleteBookingUseCase: serviceLocator<DeleteBookingUsecase>(), createBookingUseCase: serviceLocator<CreateBookingUseCase>() ,
       ),
     );
   }
 
 Future<void> _initServiceModule() async {
 
-
   serviceLocator.registerFactory(
         () => ServiceRemoteDataSource(apiService: serviceLocator<ApiService>()),
   );
-
-  // Repository
-
 
   serviceLocator.registerFactory<ServiceRemoteRepository>(
         () => ServiceRemoteRepository(
