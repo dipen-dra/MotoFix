@@ -39,19 +39,23 @@ class BookingApiModel {
 
   Map<String, dynamic> toJson() => _$BookingApiModelToJson(this);
 
+  // --- THIS IS THE CORRECTED METHOD ---
   BookingEntity toEntity() {
     return BookingEntity(
-      id: id,
-      customerName: customerName,
-      serviceType: serviceType,
-      bikeModel: bikeModel,
-      date: date,
-      notes: notes,
-      totalCost: totalCost,
-      status: status,
-      paymentStatus: paymentStatus,
-      isPaid: isPaid,
-      paymentMethod: paymentMethod,
+      // Provide a default empty string if id is null
+      id: id ?? '',
+      // Provide a default value for every nullable field
+      customerName: customerName ?? 'Unknown Customer',
+      serviceType: serviceType ?? 'Unknown Service',
+      bikeModel: bikeModel ?? 'N/A',
+      date:
+          date ?? DateTime.now(), // Default to the current time if date is null
+      notes: notes ?? '',
+      totalCost: totalCost ?? 0.0,
+      status: status ?? 'Pending',
+      paymentStatus: paymentStatus ?? 'Unpaid',
+      isPaid: isPaid ?? false,
+      paymentMethod: paymentMethod ?? 'Not specified',
     );
   }
 
@@ -72,6 +76,7 @@ class BookingApiModel {
   }
 
   static List<BookingEntity> toEntityList(List<BookingApiModel> models) {
+    // This now safely converts a list of models to a list of entities
     return models.map((model) => model.toEntity()).toList();
   }
 }

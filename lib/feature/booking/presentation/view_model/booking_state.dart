@@ -1,46 +1,41 @@
-// motofix_app/feature/service/presentation/bloc/booking_state.dart
-
 import 'package:equatable/equatable.dart';
-
-import '../../domain/entity/booking_entity.dart';
+import 'package:motofix_app/feature/booking/domain/entity/booking_entity.dart';
 
 abstract class BookingState extends Equatable {
   const BookingState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-// Initial state, before any action is taken
 class BookingInitial extends BookingState {}
 
-// State when an operation is in progress (e.g., fetching data)
 class BookingLoading extends BookingState {}
 
 class BookingLoadSuccess extends BookingState {
   final List<BookingEntity> bookings;
+  final String? successMessage; // ADDED: To carry a success message
 
-  const BookingLoadSuccess(this.bookings);
+  // UPDATED: Added optional successMessage parameter
+  const BookingLoadSuccess(this.bookings, {this.successMessage});
 
   @override
-  List<Object> get props => [bookings];
+  List<Object?> get props => [bookings, successMessage];
 }
 
+// This state is for one-off actions like creation or deletion success feedback
 class BookingActionSuccess extends BookingState {
   final String message;
-
   const BookingActionSuccess(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
-// State when any operation fails
 class BookingFailure extends BookingState {
   final String error;
-
   const BookingFailure(this.error);
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 }

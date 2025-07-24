@@ -1,5 +1,9 @@
 // lib/features/booking/presentation/pages/create_booking_screen.dart
 
+// --- NO CHANGES NEEDED ---
+// This file correctly listens for `BookingActionSuccess`, shows a SnackBar,
+// and navigates back two pages, which is the desired behavior.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +11,8 @@ import 'package:intl/intl.dart';
 import '../../../../core/common/app_colors.dart';
 import '../../../customer_service/domain/entity/service_entity.dart';
 import '../view_model/booking_event.dart';
-import '../view_model/booking_state.dart';
 import '../view_model/booking_view_model.dart';
+import '../view_model/booking_state.dart';
 
 class CreateBookingScreen extends StatefulWidget {
   final ServiceEntity service;
@@ -45,21 +49,11 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
         _selectedDate = picked;
         _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
-      // Optional: Force re-validation when a date is selected
-      // _formKey.currentState?.validate();
     }
   }
 
   void _submitBooking() {
-    // --- START OF DEBUGGING CODE ---
-    // Add these print statements to see the values right before the crash.
-    print('--- SUBMITTING BOOKING ---');
-    print('Value of widget.service.serviceId: ${widget.service.serviceId}');
-    print('Value of _selectedDate: $_selectedDate');
-    // --- END OF DEBUGGING CODE ---
-
     if (_formKey.currentState!.validate()) {
-      // The crash happens on the next line if one of the values is null.
       context.read<BookingViewModel>().add(
             CreateBookingEvent(
               serviceId: widget.service.serviceId!,
@@ -68,8 +62,6 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
               notes: _notesController.text.trim(),
             ),
           );
-    } else {
-      print('--- FORM VALIDATION FAILED ---');
     }
   }
 
@@ -93,6 +85,7 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                   backgroundColor: AppColors.accentGreen,
                 ),
               );
+            // Navigate back twice to return to the booking list page
             Navigator.of(context)
               ..pop()
               ..pop();

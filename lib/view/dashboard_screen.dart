@@ -1,9 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
-import 'package:motofix_app/feature/booking/presentation/view/create_booking.dart';
 
 import 'package:motofix_app/feature/customer_service/presentation/view_model/service_view_model.dart';
 
@@ -22,7 +19,7 @@ class MotoFixDashboard extends StatelessWidget {
   // The list of screens is now clean, without any BlocProviders.
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const BookingView(), // No longer needs a local provider
+    const BookingView(),
     const HistoryScreen(),
     const ProfileViewPage(),
   ];
@@ -44,7 +41,8 @@ class MotoFixDashboard extends StatelessWidget {
           value: serviceLocator<BookingViewModel>(),
         ),
 
-        BlocProvider<ProfileViewModel>.value(value: serviceLocator<ProfileViewModel>()) ,
+        BlocProvider<ProfileViewModel>.value(
+            value: serviceLocator<ProfileViewModel>()),
       ],
       // The child is a builder that listens to navigation changes
       child: BlocBuilder<BottomNavigationCubit, int>(
@@ -88,7 +86,7 @@ class MotoFixDashboard extends StatelessWidget {
           label: 'Activities',
         ),
         BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.history),
+          icon: Icon(Icons.history),
           label: 'History',
         ),
         BottomNavigationBarItem(

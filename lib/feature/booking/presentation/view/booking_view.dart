@@ -1,27 +1,37 @@
+// booking_view.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/service_locator/service_locator.dart';
 import '../../domain/entity/booking_entity.dart';
 import '../view_model/booking_event.dart';
-import '../view_model/booking_state.dart';
 import '../view_model/booking_view_model.dart';
+import '../view_model/booking_state.dart';
 
-class BookingPage extends StatelessWidget {
-  const BookingPage({super.key});
+// You can now delete the BookingPage widget, as it's redundant.
+// class BookingPage extends StatelessWidget { ... }
+
+// --- MODIFIED BookingView ---
+class BookingView extends StatefulWidget {
+  const BookingView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => serviceLocator<BookingViewModel>()
-        ..add(LoadUserBookingsEvent()), // Initial event to load data
-      child: const BookingView(),
-    );
-  }
+  State<BookingView> createState() => _BookingViewState();
 }
 
-class BookingView extends StatelessWidget {
-  const BookingView({super.key});
+class _BookingViewState extends State<BookingView> {
+  @override
+  void initState() {
+    super.initState();
+    // Get the BLoC provided by MotoFixDashboard and tell it to load the data.
+    // We check the state to avoid re-fetching if the user navigates away and back.
+    // `IndexedStack` keeps the state, so this will only run once.
+    final bookingViewModel = context.read<BookingViewModel>();
+    if (bookingViewModel.state is BookingInitial) {
+      bookingViewModel.add(LoadUserBookingsEvent());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,26 +41,23 @@ class BookingView extends StatelessWidget {
         backgroundColor: const Color(0xFF2A4759),
         elevation: 0,
       ),
+      // The rest of your UI code remains exactly the same.
       body: BlocConsumer<BookingViewModel, BookingState>(
         listener: (context, state) {
-          if (state is BookingActionSuccess) {
+          if (state is BookingLoadSuccess && state.successMessage != null) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
-                content: Text(state.message),
+                content: Text(state.successMessage!),
                 backgroundColor: Colors.green,
               ));
           } else if (state is BookingFailure) {
-            // This listener shows a snackbar for any failure,
-            // even if the builder is showing a retry button.
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
-                  content: Text(state.error), backgroundColor: Colors.red));
+                  content: Text(state.error), backgroundColor: Colors.yellow));
           }
         },
-        // Prevent rebuilding the whole list when an action (like delete) succeeds.
-        // The list will be reloaded by the ViewModel anyway.
         buildWhen: (previous, current) => current is! BookingActionSuccess,
         builder: (context, state) {
           if (state is BookingLoading || state is BookingInitial) {
@@ -105,7 +112,6 @@ class BookingView extends StatelessWidget {
               ),
             );
           }
-          // Fallback widget for any unhandled state
           return const Center(child: Text("An unknown error occurred."));
         },
       ),
@@ -113,13 +119,14 @@ class BookingView extends StatelessWidget {
   }
 
   Widget _buildBookingItem(BuildContext context, BookingEntity booking) {
+    // This method remains unchanged.
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 4,
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
         title: Text(
-          booking.serviceType.toString() ,
+          booking.serviceType.toString(),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
@@ -130,13 +137,12 @@ class BookingView extends StatelessWidget {
         trailing: IconButton(
           icon: const Icon(Icons.delete, color: Colors.redAccent),
           onPressed: () {
-            // Show confirmation dialog before deleting
             showDialog(
               context: context,
               builder: (dialogContext) => AlertDialog(
                 title: const Text('Confirm Deletion'),
-                content: const Text(
-                    'Are you sure you want to delete this booking?'),
+                content:
+                const Text('Are you sure you want to delete this booking?'),
                 actions: [
                   TextButton(
                     child: const Text('Cancel'),
@@ -146,10 +152,9 @@ class BookingView extends StatelessWidget {
                     child: const Text('Delete',
                         style: TextStyle(color: Colors.red)),
                     onPressed: () {
-                      // Dispatch delete event to the ViewModel
                       context
                           .read<BookingViewModel>()
-                          .add(DeleteBookingEvent( bookingId:booking.id.toString()));
+                          .add(DeleteBookingEvent(bookingId: booking.id.toString()));
                       Navigator.of(dialogContext).pop();
                     },
                   ),

@@ -73,9 +73,12 @@ class RemoteBookingDataSource implements BookingDataSource {
   }
 
   @override
-  Future<List<BookingEntity>> getUserBooking() async {
+  Future<List<BookingEntity>> getUserBooking(String? token) async {
     try {
-      final response = await _apiService.dio.get(ApiEndpoints.getAllBooking);
+      final response = await _apiService.dio.get(
+        ApiEndpoints.getAllBooking,
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
       print("All booking user $response");
 
       if (response.statusCode == 200) {

@@ -41,9 +41,10 @@ class BookingRemoteRepository implements BookingRepository {
   }
 
   @override
-  Future<Either<Failure, List<BookingEntity>>> getUserBookings() async {
+  Future<Either<Failure, List<BookingEntity>>> getUserBookings(
+      String? token) async {
     try {
-      final bookings = await _remoteBookingDataSource.getUserBooking();
+      final bookings = await _remoteBookingDataSource.getUserBooking(token);
       return Right(bookings);
     } catch (e) {
       return left(ApiFailure(statusCode: 500, message: e.toString()));

@@ -4,7 +4,7 @@ import 'package:motofix_app/core/error/failure.dart';
 import '../entity/booking_entity.dart';
 
 abstract class BookingRepository {
-  Future<Either<Failure, List<BookingEntity>>> getUserBookings();
+  Future<Either<Failure, List<BookingEntity>>> getUserBookings(String? token);
   Future<Either<Failure, void>> createBooking(
       BookingEntity entity, String? token);
   Future<Either<Failure, BookingEntity>> updateUserBooking(String bookingId);

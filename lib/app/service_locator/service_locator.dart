@@ -174,7 +174,7 @@ Future<void> _initAuthModule() async {
 
 
     serviceLocator.registerFactory(
-        () => GetUserBookings(bookingRepository: serviceLocator<BookingRemoteRepository>())
+        () => GetUserBookings(bookingRepository: serviceLocator<BookingRemoteRepository>() , tokenSharedPrefs: serviceLocator<TokenSharedPrefs>())
     ) ;
     serviceLocator.registerFactory(
           () => DeleteBookingUsecase(bookingRepository: serviceLocator<BookingRemoteRepository>() ,

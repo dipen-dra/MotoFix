@@ -22,7 +22,7 @@ class LocalBookingDataSource implements BookingDataSource {
   }
 
   @override
-  Future<List<BookingEntity>> getUserBooking() {
+  Future<List<BookingEntity>> getUserBooking(String? token) async {
     // TODO: implement getUserBooking
     throw UnimplementedError();
   }
