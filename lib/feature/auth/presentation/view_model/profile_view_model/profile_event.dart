@@ -26,3 +26,5 @@ class UpdateProfileEvent extends ProfileEvent {
 }
 
 class DeleteProfileEvent extends ProfileEvent {}
+
+class LogoutEvent extends ProfileEvent {}

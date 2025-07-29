@@ -51,8 +51,6 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      // In a real app, you'd show a snackbar here.
-      // For this example, we're just printing to the console.
       debugPrint("Could not open the URL");
     }
   }
@@ -65,11 +63,8 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF2A4759),
       body: SafeArea(
-        // BlocConsumer is used to both listen to state changes (for navigation, dialogs)
-        // and to rebuild the UI when the state changes.
         child: BlocConsumer<LoginViewModel, LoginState>(
-          listener: (context, state) {
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             return GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),

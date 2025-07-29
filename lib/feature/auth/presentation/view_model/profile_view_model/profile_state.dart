@@ -1,56 +1,59 @@
 import 'package:equatable/equatable.dart';
-
-import '../../../domain/entity/auth_entity.dart';
+import 'package:motofix_app/feature/auth/domain/entity/auth_entity.dart';
 
 class ProfileState extends Equatable {
-  final bool isLoading;
+  final bool? isLoading;
+  final String? onError;
+  final UserEntity? userEntity;
   final bool? isEditing;
   final bool? isProfileDeleted;
+  final bool? isLoggedOut;
 
-  final UserEntity? userEntity;
-  final String? onError;
-
-  ProfileState({
-    required this.isLoading,
+  const ProfileState({
+    this.isLoading,
+    this.onError,
+    this.userEntity,
     this.isEditing,
     this.isProfileDeleted,
-    required this.userEntity,
-    this.onError,
+    this.isLoggedOut,
   });
 
   factory ProfileState.initial() {
-    return ProfileState(
+    return const ProfileState(
       isLoading: false,
+      onError: null,
       userEntity: null,
-      onError: '',
       isEditing: false,
       isProfileDeleted: false,
+      isLoggedOut: false,
     );
   }
 
   ProfileState copyWith({
     bool? isLoading,
-    UserEntity? userEntity,
     String? onError,
+    UserEntity? userEntity,
     bool? isEditing,
     bool? isProfileDeleted,
+    bool? isLoggedOut,
   }) {
     return ProfileState(
       isLoading: isLoading ?? this.isLoading,
+      onError: onError,
       userEntity: userEntity ?? this.userEntity,
-      onError: onError ?? this.onError,
       isEditing: isEditing ?? this.isEditing,
       isProfileDeleted: isProfileDeleted ?? this.isProfileDeleted,
+      isLoggedOut: isLoggedOut ?? this.isLoggedOut,
     );
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [
-    isLoading,
-    userEntity,
-    onError,
-    isEditing,
-    isLoading,
-  ];
+        isLoading,
+        onError,
+        userEntity,
+        isEditing,
+        isProfileDeleted,
+        isLoggedOut,
+      ];
 }

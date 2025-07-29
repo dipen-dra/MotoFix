@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
-import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_state.dart';
+import 'package:motofix_app/app/service_locator/service_locator.dart';
+import 'package:motofix_app/core/common/shaker_detect.dart';
+import 'package:motofix_app/feature/auth/presentation/view/signin_page.dart';
+import 'package:motofix_app/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_event.dart';
-
+import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_state.dart';
+import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
 import '../../domain/entity/auth_entity.dart';
 
 class ProfileViewPage extends StatefulWidget {
@@ -20,8 +23,33 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
 
+  // NEW: Declare an instance of the ShakeDetector.
+  late ShakeDetector _shakeDetector;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // NEW: Initialize the ShakeDetector.
+    _shakeDetector = ShakeDetector(
+      onPhoneShake: () {
+        // When the phone is shaken, we check if the widget is still
+        // part of the tree and then show the same logout confirmation dialog.
+        if (mounted) {
+          _showLogoutConfirmationDialog(context);
+        }
+      },
+    );
+
+    // NEW: Start listening for shake events.
+    _shakeDetector.startListening();
+  }
+
   @override
   void dispose() {
+    // NEW: Stop listening to the sensor to prevent memory leaks.
+    _shakeDetector.stopListening();
+
     _fullNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
@@ -36,23 +64,48 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
     _addressController.text = user.address ?? '';
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context) {
+  void _showLogoutConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Delete Profile'),
-          content: const Text(
-            'Are you sure you want to delete your profile? This action cannot be undone.',
-          ),
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to log out?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
+                context.read<ProfileViewModel>().add(LogoutEvent());
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.blue[600]),
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Delete Profile'),
+          content: const Text(
+              'Are you sure you want to delete your profile? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
                 context.read<ProfileViewModel>().add(DeleteProfileEvent());
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -91,38 +144,50 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
               ),
             );
           }
-
-          if (state.isProfileDeleted == true) {
-            Navigator.of(context).pushReplacementNamed('/login');
+          if (state.isLoggedOut == true || state.isProfileDeleted == true) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: serviceLocator<LoginViewModel>(),
+                  child: const SignInPage(),
+                ),
+              ),
+              (Route<dynamic> route) => false,
+            );
           }
         },
         builder: (context, state) {
-          if (state.isLoading == true) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (state.isLoading == true && state.userEntity == null) {
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (state.userEntity == null) {
-            return const Center(
-              child: Text('No user data available'),
-            );
+            return const Center(child: Text('No user data available.'));
           }
 
           final user = state.userEntity!;
           final isEditing = state.isEditing ?? false;
 
-          if (!isEditing) {
-            return _buildViewMode(context, user);
-          } else {
-            _populateControllers(user);
-            return _buildEditMode(context, user);
-          }
+          return Stack(
+            children: [
+              if (!isEditing)
+                _buildViewMode(context, user)
+              else
+                _buildEditMode(context, user),
+              if (state.isLoading == true && state.userEntity != null)
+                Container(
+                  color: Colors.black.withOpacity(0.3),
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+            ],
+          );
         },
       ),
     );
   }
 
+  // All other methods and widgets below this point remain unchanged.
+  // ...
   Widget _buildViewMode(BuildContext context, UserEntity user) {
     return SingleChildScrollView(
       child: Column(
@@ -134,7 +199,6 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                // Profile Picture
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.blue[100],
@@ -143,10 +207,10 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                       : null,
                   child: user.profilePicture == null
                       ? Icon(
-                    Icons.person,
-                    size: 50,
-                    color: Colors.blue[600],
-                  )
+                          Icons.person,
+                          size: 50,
+                          color: Colors.blue[600],
+                        )
                       : null,
                 ),
                 const SizedBox(height: 16),
@@ -189,28 +253,24 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
             child: Column(
               children: [
                 _buildDetailTile(
-                  icon: Icons.person_outline,
-                  label: 'Full Name',
-                  value: user.fullName,
-                ),
+                    icon: Icons.person_outline,
+                    label: 'Full Name',
+                    value: user.fullName),
                 _buildDivider(),
                 _buildDetailTile(
-                  icon: Icons.email_outlined,
-                  label: 'Email',
-                  value: user.email,
-                ),
+                    icon: Icons.email_outlined,
+                    label: 'Email',
+                    value: user.email),
                 _buildDivider(),
                 _buildDetailTile(
-                  icon: Icons.phone_outlined,
-                  label: 'Phone',
-                  value: user.phone ?? 'Not provided',
-                ),
+                    icon: Icons.phone_outlined,
+                    label: 'Phone',
+                    value: user.phone ?? 'Not provided'),
                 _buildDivider(),
                 _buildDetailTile(
-                  icon: Icons.location_on_outlined,
-                  label: 'Address',
-                  value: user.address ?? 'Not provided',
-                ),
+                    icon: Icons.location_on_outlined,
+                    label: 'Address',
+                    value: user.address ?? 'Not provided'),
               ],
             ),
           ),
@@ -226,13 +286,35 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      context.read<ProfileViewModel>().add(ToggleEditModeEvent());
+                      _populateControllers(
+                          user); // Pre-fill fields before editing
+                      context
+                          .read<ProfileViewModel>()
+                          .add(ToggleEditModeEvent());
                     },
                     icon: const Icon(Icons.edit),
                     label: const Text('Edit Profile'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[600],
                       foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // NEW LOGOUT BUTTON
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _showLogoutConfirmationDialog(context),
+                    icon: const Icon(Icons.logout),
+                    label: const Text('Logout'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.blue[600],
+                      side: BorderSide(color: Colors.blue[600]!),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -267,6 +349,7 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
     );
   }
 
+  // _buildEditMode and other helper widgets remain the same
   Widget _buildEditMode(BuildContext context, UserEntity user) {
     return SingleChildScrollView(
       child: Padding(
@@ -302,10 +385,10 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                               : null,
                           child: user.profilePicture == null
                               ? Icon(
-                            Icons.person,
-                            size: 50,
-                            color: Colors.blue[600],
-                          )
+                                  Icons.person,
+                                  size: 50,
+                                  color: Colors.blue[600],
+                                )
                               : null,
                         ),
                         Positioned(
@@ -413,7 +496,9 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        context.read<ProfileViewModel>().add(ToggleEditModeEvent());
+                        context
+                            .read<ProfileViewModel>()
+                            .add(ToggleEditModeEvent());
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -429,19 +514,20 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          final updatedUser = UserEntity(
-                            userId: user.userId,
+                          final updatedUser = user.copyWith(
                             fullName: _fullNameController.text,
                             email: _emailController.text,
-                            password: user.password,
-                            phone: _phoneController.text.isEmpty ? null : _phoneController.text,
-                            address: _addressController.text.isEmpty ? null : _addressController.text,
-                            profilePicture: user.profilePicture,
+                            phone: _phoneController.text.isEmpty
+                                ? null
+                                : _phoneController.text,
+                            address: _addressController.text.isEmpty
+                                ? null
+                                : _addressController.text,
                           );
 
                           context.read<ProfileViewModel>().add(
-                            UpdateProfileEvent(userEntity: updatedUser),
-                          );
+                                UpdateProfileEvent(userEntity: updatedUser),
+                              );
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -464,11 +550,8 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
     );
   }
 
-  Widget _buildDetailTile({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
+  Widget _buildDetailTile(
+      {required IconData icon, required String label, required String value}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(

@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/error/failure.dart';
 
-
 class TokenSharedPrefs {
   final SharedPreferences _sharedPreferences;
 
@@ -14,7 +13,6 @@ class TokenSharedPrefs {
     try {
       await _sharedPreferences.setString('token', token);
       return Right(null);
-
     } catch (e) {
       return Left(
         SharedPreferencesFailure(message: 'Failed to  save token $e'),
@@ -29,6 +27,17 @@ class TokenSharedPrefs {
     } catch (e) {
       return Left(
         SharedPreferencesFailure(message: 'Failed to retreive token $e'),
+      );
+    }
+  }
+
+  Future<Either<Failure, void>> clearToken() async {
+    try {
+      await _sharedPreferences.remove('token');
+      return Right(null);
+    } catch (e) {
+      return Left(
+        SharedPreferencesFailure(message: 'Failed to clear token $e'),
       );
     }
   }
