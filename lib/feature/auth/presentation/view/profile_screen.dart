@@ -11,7 +11,6 @@ import 'package:motofix_app/feature/auth/presentation/view_model/login_view_mode
 import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_event.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_state.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart';
-// Correct import for the app's color theme
 import '../../domain/entity/auth_entity.dart';
 
 const String _defaultAvatarUrl = 'https://cdn.britannica.com/35/238335-050-2CB2EB8A/Lionel-Messi-Argentina-Netherlands-World-Cup-Qatar-2022.jpg';

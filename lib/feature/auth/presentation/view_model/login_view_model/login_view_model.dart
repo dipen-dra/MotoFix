@@ -37,20 +37,6 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  // void _onNavigateToHomeView(
-  //     NavigateToHomeView event,
-  //     Emitter<LoginState> emit,
-  //     ) {
-  //   if (event.context.mounted) {
-  //     Navigator.pushAndRemoveUntil(
-  //       event.context,
-  //       MaterialPageRoute(
-  //         builder: (_) => const MotoFixDashboard(),
-  //       ),
-  //           (route) => false,
-  //     );
-  //   }
-  // }
 
   void _onNavigateToHomeView(
       NavigateToHomeView event,
