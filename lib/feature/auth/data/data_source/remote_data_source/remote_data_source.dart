@@ -128,6 +128,7 @@ class UserRemoteDataSource implements IUserDataSource {
 
   @override
   Future<UserEntity> updateUserWithPicture(UserEntity user, File profilePictureFile) {
+    // TODO: implement updateUserWithPicture
     throw UnimplementedError();
   }
 }

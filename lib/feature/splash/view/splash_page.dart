@@ -12,6 +12,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provide the Cubit to the widget tree
     return BlocProvider(
       create: (context) => serviceLocator<SplashCubit>(),
       child: const SplashView(),

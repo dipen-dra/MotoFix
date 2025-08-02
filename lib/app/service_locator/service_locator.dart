@@ -1,4 +1,6 @@
 
+
+
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:motofix_app/core/network/api_service.dart';
@@ -11,6 +13,9 @@ import 'package:motofix_app/feature/auth/domain/use_case/register_use_case.dart'
 import 'package:motofix_app/feature/auth/domain/use_case/user_logout_usecase.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:motofix_app/feature/booking/domain/use_case/get_booking_byId_usecase.dart';
+import 'package:motofix_app/feature/booking/domain/use_case/get_completed_booking_usecase.dart';
+import 'package:motofix_app/feature/booking/presentation/view_model/complete_view_model.dart';
 import 'package:motofix_app/feature/customer_service/data/data_source/remote_data_source/service_remote_data_source.dart';
 import 'package:motofix_app/feature/customer_service/data/repository/remote_repository/service_remote_repository.dart';
 import 'package:motofix_app/feature/customer_service/domain/usecase/get_all_services_usecase.dart';
@@ -21,6 +26,13 @@ import 'package:motofix_app/feature/notification/domain/repository/notification_
 import 'package:motofix_app/feature/notification/domain/use_case/get_notifications_usecase.dart';
 import 'package:motofix_app/feature/notification/domain/use_case/mark_as_read_usecase.dart';
 import 'package:motofix_app/feature/notification/presentation/view_model/notification_view_model.dart';
+import 'package:motofix_app/feature/review/data/data_source/review_data_source.dart';
+import 'package:motofix_app/feature/review/data/data_source/review_remote_data_source.dart';
+import 'package:motofix_app/feature/review/data/repository/review_remote_repository.dart';
+import 'package:motofix_app/feature/review/domain/repository/review_repository.dart';
+import 'package:motofix_app/feature/review/domain/usecase/add_review_usecase.dart';
+import 'package:motofix_app/feature/review/domain/usecase/get_review_usecase.dart';
+import 'package:motofix_app/feature/review/presentation/view_model/review_view_model.dart';
 import 'package:motofix_app/feature/splash/view_model/spash_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +60,7 @@ Future initDependencies() async {
   await _initServiceModule();
   await _initNotificationModule();
   await _initSplashModule();
+  await _initReviewModule() ;
 }
 
 Future _initHiveService() async {
@@ -163,6 +176,20 @@ Future<void> _initBookingModule() async {
     ),
   );
 
+   serviceLocator.registerFactory(
+    () => GetCompletedBookingsUseCase(
+      bookingRepository: serviceLocator<BookingRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => GetBookingByIdUseCase(
+      bookingRepository: serviceLocator<BookingRepository>(),
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
   serviceLocator.registerFactory(
     () => CreateBookingUseCase(
         bookingRepository: serviceLocator<BookingRemoteRepository>(),
@@ -175,6 +202,13 @@ Future<void> _initBookingModule() async {
       getUserBookingsUseCase: serviceLocator<GetUserBookings>(),
       deleteBookingUseCase: serviceLocator<DeleteBookingUsecase>(),
       createBookingUseCase: serviceLocator<CreateBookingUseCase>(),
+    ),
+  );
+
+  serviceLocator.registerFactory<BookingHistoryBloc>(
+    () => BookingHistoryBloc(
+      getCompletedBookingsUseCase: serviceLocator<GetCompletedBookingsUseCase>(),
+      getBookingByIdUseCase: serviceLocator<GetBookingByIdUseCase>(),
     ),
   );
 }
@@ -247,6 +281,43 @@ Future<void> _initSplashModule() async {
   serviceLocator.registerFactory<SplashCubit>(
     () => SplashCubit(
       checkAuthStatusUseCase: serviceLocator<CheckAuthStatusUseCase>(),
+    ),
+  );
+}
+
+Future<void> _initReviewModule() async {
+  // Data Source
+  // Register the concrete implementation for the abstract data source.
+  serviceLocator.registerFactory<ReviewRemoteDataSource>(
+    () => ReviewRemoteDataSourceImpl(
+      apiService: serviceLocator<ApiService>(),
+      userSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  // Repository
+  // Register the concrete implementation for the abstract repository.
+  serviceLocator.registerFactory<IReviewRepository>(
+    () => ReviewRepositoryImpl(
+      remoteDataSource: serviceLocator<ReviewRemoteDataSource>(),
+    ),
+  );
+
+  // Use Case
+  serviceLocator.registerFactory<AddReviewUsecase>(
+    () => AddReviewUsecase(
+      repository: serviceLocator<IReviewRepository>(),
+    ),
+  );
+
+  serviceLocator.registerFactory<GetServiceReviewsUsecase>(
+    () => GetServiceReviewsUsecase(repository : serviceLocator<IReviewRepository>())
+  ) ;
+
+  // ViewModel (BLoC)
+  serviceLocator.registerFactory<ReviewBloc>(
+    () => ReviewBloc(
+      addReviewUsecase: serviceLocator<AddReviewUsecase>(), getServiceReviewsUsecase: serviceLocator<GetServiceReviewsUsecase>(),
     ),
   );
 }
