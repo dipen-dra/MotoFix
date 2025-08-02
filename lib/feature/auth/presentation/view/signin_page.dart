@@ -51,8 +51,6 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      // In a real app, you'd show a snackbar here.
-      // For this example, we're just printing to the console.
       debugPrint("Could not open the URL");
     }
   }
@@ -65,15 +63,8 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF2A4759),
       body: SafeArea(
-        // BlocConsumer is used to both listen to state changes (for navigation, dialogs)
-        // and to rebuild the UI when the state changes.
         child: BlocConsumer<LoginViewModel, LoginState>(
-          listener: (context, state) {
-            // The listener is the perfect place for "side effects" that shouldn't
-            // happen during a build, like navigation or showing a SnackBar.
-            // Note: Navigation is now handled by the ViewModel emitting events,
-            // which keeps the view cleaner. The snackbar is also shown from the view model.
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             return GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
@@ -267,9 +258,7 @@ class _SignInPageState extends State<SignInPage> {
                             children: [
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    /* TODO: Implement Facebook Sign In */
-                                  },
+                                  onPressed: () {},
                                   icon: const Icon(Icons.facebook),
                                   label: const Text("Facebook"),
                                   style: ElevatedButton.styleFrom(
@@ -286,9 +275,7 @@ class _SignInPageState extends State<SignInPage> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    /* TODO: Implement Google Sign In */
-                                  },
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     foregroundColor: Colors.black,

@@ -12,7 +12,7 @@ ServiceApiModel _$ServiceApiModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),
-      duration: json['duration'] as String,
+      duration: json['duration'] as String?,
     );
 
 Map<String, dynamic> _$ServiceApiModelToJson(ServiceApiModel instance) =>

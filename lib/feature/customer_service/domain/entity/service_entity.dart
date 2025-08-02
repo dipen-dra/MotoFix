@@ -5,7 +5,7 @@ class ServiceEntity extends Equatable {
   final String name ;
   final String description ;
   final double price ;
-  final String duration ;
+  final String? duration ;
 
   ServiceEntity({
     this.serviceId ,

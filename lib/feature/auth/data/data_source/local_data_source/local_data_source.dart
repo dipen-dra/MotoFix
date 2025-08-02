@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:motofix_app/core/network/hive_service.dart';
 import 'package:motofix_app/feature/auth/data/data_source/user_data_source.dart';
 import 'package:motofix_app/feature/auth/data/model/user_hive_model.dart';
@@ -33,5 +35,29 @@ class UserLocalDataSource implements IUserDataSource {
     } catch (e) {
       throw Exception("Registration Failed : $e");
     }
+  }
+
+  @override
+  Future<void> deleteUser(String? token) {
+    // TODO: implement deleteUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserEntity> getUser(String? token) {
+    // TODO: implement getUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserEntity> updateUser(UserEntity user, String? token) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserEntity> updateUserWithPicture(UserEntity user, File profilePictureFile) {
+    // TODO: implement updateUserWithPicture
+    throw UnimplementedError();
   }
 }
