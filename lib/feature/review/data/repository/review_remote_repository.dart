@@ -17,7 +17,6 @@ class ReviewRepositoryImpl implements IReviewRepository {
   
   @override
   Future<Either<Failure, List<ReviewEntity>>> getServiceReviews(String serviceId) {
-    // TODO: implement getServiceReviews
     return remoteDataSource.getServiceReviews(serviceId) ;
   }
 }
