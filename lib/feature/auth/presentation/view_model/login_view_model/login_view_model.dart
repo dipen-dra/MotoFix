@@ -91,8 +91,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
             color: Colors.red,
           );
         }
-      },
-          (email) {
+      }, (email) {
         emit(state.copyWith(isLoading: false, isSuccess: true));
 
         if (event.context.mounted) {

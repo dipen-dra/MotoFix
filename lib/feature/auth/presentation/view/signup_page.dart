@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/egister_event.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_state.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
@@ -20,7 +19,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _termsAgreed = false;
@@ -29,16 +27,14 @@ class _SignUpPageState extends State<SignUpPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
   void _signUp() {
-    FocusScope.of(context).unfocus(); // Dismiss keyboard
+    FocusScope.of(context).unfocus();
     if (!_termsAgreed) {
-      // You could use the snackbar from the ViewModel here if you prefer
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Please agree to the terms and conditions."),
         backgroundColor: Colors.red,
@@ -46,13 +42,11 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    // Validate the form. If it's valid, dispatch the event.
     if (_formKey.currentState!.validate()) {
       context.read<RegisterViewModel>().add(
             RegisterUserEvent(
               fullName: _nameController.text.trim(),
               email: _emailController.text.trim(),
-
               password: _passwordController.text,
               context: context,
             ),
@@ -111,7 +105,32 @@ class _SignUpPageState extends State<SignUpPage> {
     if (!value.contains(RegExp(r'[!@#\$&*~]'))) {
       return "Must contain at least one special character.";
     }
-    return null; // Return null if the password is valid
+    return null;
+  }
+
+  InputDecoration _inputDecoration(
+      {required String label, required IconData icon}) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white70),
+      prefixIcon: Icon(icon, color: Colors.white70),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.white38),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.redAccent),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 
   @override
@@ -120,10 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
       backgroundColor: const Color(0xFF2A4759),
       body: SafeArea(
         child: BlocConsumer<RegisterViewModel, RegisterState>(
-          listener: (context, state) {
-            // Listener can handle one-time actions like navigation or dialogs.
-            // In our new setup, navigation is handled inside the ViewModel for cleaner separation.
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             return GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
@@ -136,8 +152,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Center(
-                          child: Image.asset('assets/images/motofix_logo.png',
-                              height: 90)),
+                        child: Image.asset('assets/images/motofix_logo.png',
+                            height: 90),
+                      ),
                       const SizedBox(height: 5),
                       const Text("Sign Up",
                           style: TextStyle(
@@ -169,37 +186,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         decoration:
                             _inputDecoration(label: "Email", icon: Icons.email),
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty)
+                          if (value == null || value.trim().isEmpty) {
                             return 'Please enter an email';
+                          }
                           final emailRegex =
                               RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                          if (!emailRegex.hasMatch(value.trim()))
+                          if (!emailRegex.hasMatch(value.trim())) {
                             return 'Please enter a valid email';
+                          }
                           return null;
                         },
                       ),
                       const SizedBox(height: 20),
-
-                      // Phone Number
-                      // IntlPhoneField(
-                      //   controller: _phoneController,
-                      //   style: const TextStyle(color: Colors.white),
-                      //   decoration: _inputDecoration(
-                      //           label: 'Phone Number', icon: Icons.phone)
-                      //       .copyWith(
-                      //     counterText: '',
-                      //   ),
-                      //   initialCountryCode: 'NP',
-                      //   dropdownTextStyle: const TextStyle(color: Colors.white),
-                      //   dropdownIcon: const Icon(Icons.arrow_drop_down,
-                      //       color: Colors.white),
-                      //   onChanged: (phone) =>
-                      //       _fullPhoneNumber = phone.completeNumber,
-                      //   validator: (phone) => (phone?.number ?? '').isEmpty
-                      //       ? 'Please enter a phone number'
-                      //       : null,
-                      // ),
-                      // const SizedBox(height: 20),
 
                       // Password
                       TextFormField(
@@ -211,10 +209,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             .copyWith(
                           suffixIcon: IconButton(
                             icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.white70),
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.white70,
+                            ),
                             onPressed: () => setState(
                                 () => _obscurePassword = !_obscurePassword),
                           ),
@@ -234,20 +233,23 @@ class _SignUpPageState extends State<SignUpPage> {
                             .copyWith(
                           suffixIcon: IconButton(
                             icon: Icon(
-                                _obscureConfirmPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.white70),
+                              _obscureConfirmPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.white70,
+                            ),
                             onPressed: () => setState(() =>
                                 _obscureConfirmPassword =
                                     !_obscureConfirmPassword),
                           ),
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty)
+                          if (value == null || value.isEmpty) {
                             return 'Please confirm your password';
-                          if (value != _passwordController.text)
+                          }
+                          if (value != _passwordController.text) {
                             return "Passwords do not match";
+                          }
                           return null;
                         },
                       ),
@@ -273,9 +275,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                   TextSpan(
                                     text: 'Terms and Conditions',
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        decoration: TextDecoration.underline),
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.underline,
+                                    ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = _showTermsAndConditions,
                                   ),
@@ -295,14 +298,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           foregroundColor: const Color(0xFF2A4759),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                         child: state.isLoading
                             ? const SizedBox(
                                 height: 24,
                                 width: 24,
                                 child: CircularProgressIndicator(
-                                    strokeWidth: 3, color: Color(0xFF2A4759)))
+                                  strokeWidth: 3,
+                                  color: Color(0xFF2A4759),
+                                ),
+                              )
                             : const Text("SIGN UP",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
@@ -318,9 +325,10 @@ class _SignUpPageState extends State<SignUpPage> {
                               TextSpan(
                                 text: 'Sign in Here',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    decoration: TextDecoration.underline),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  decoration: TextDecoration.underline,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => Navigator.of(context).pop(),
                               ),
@@ -336,27 +344,6 @@ class _SignUpPageState extends State<SignUpPage> {
           },
         ),
       ),
-    );
-  }
-
-  InputDecoration _inputDecoration(
-      {required String label, required IconData icon}) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.white70),
-      prefixIcon: Icon(icon, color: Colors.white70),
-      enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white30),
-          borderRadius: BorderRadius.circular(12)),
-      focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(12)),
-      errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red),
-          borderRadius: BorderRadius.circular(12)),
-      focusedErrorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red, width: 2),
-          borderRadius: BorderRadius.circular(12)),
     );
   }
 }

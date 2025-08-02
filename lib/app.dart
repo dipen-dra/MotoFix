@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motofix_app/app/service_locator/service_locator.dart';
 import 'package:motofix_app/feature/auth/presentation/view/signin_page.dart';
 import 'package:motofix_app/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
+import 'package:motofix_app/feature/splash/view/splash_page.dart'; // Import the SplashPage
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -51,10 +52,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: BlocProvider.value(
-        value: serviceLocator<LoginViewModel>(),
-        child: SignInPage(),
-      ),
+      // Set the SplashPage as the starting point of the app
+      home: const SplashPage(),
     );
   }
 }

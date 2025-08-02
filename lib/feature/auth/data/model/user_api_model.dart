@@ -9,23 +9,27 @@ part 'user_api_model.g.dart';
 
 @JsonSerializable()
 class UserApiModel extends Equatable {
-  // FIX #2: This is the most important fix.
-  // It stops the `_id` field from being sent in the JSON when it's null.
+
   @JsonKey(name: '_id', includeIfNull: false)
   final String? id;
 
   @JsonKey(name: 'fullName')
-  final String fullName;
+  final String? fullName;
 
-  final String email;
+  final String? email;
   final String? password;
+  final String? phone ;
+  final String? address ;
+  final String? profilePicture ;
 
   const UserApiModel({
     this.id,
-    required this.fullName,
-    required this.email,
-    // FIX #3: The password field is nullable (String?), so it shouldn't be 'required'.
+     this.fullName,
+     this.email,
     this.password,
+    this.phone ,
+    this.address ,
+    this.profilePicture
   });
 
   factory UserApiModel.fromJson(Map<String, dynamic> json) =>
@@ -35,11 +39,14 @@ class UserApiModel extends Equatable {
 
   //to entity
   UserEntity toEntity() {
-    return UserEntity(
+    return UserEntity(  
       userId: id,
-      fullName: fullName,
-      email: email,
+      fullName: fullName ?? '',
+      email: email ?? '',
       password: password ?? '',
+      phone: phone  ?? '',
+      address:  address  ?? '',
+      profilePicture: profilePicture ?? ''
     );
   }
 
@@ -54,10 +61,12 @@ class UserApiModel extends Equatable {
       fullName: entity.fullName,
       email: entity.email,
       password: entity.password,
+      phone: entity.phone ,
+      address:  entity.address ,
+      profilePicture:  entity.profilePicture
     );
   }
 
   @override
-  // Cleaned up the props getter
-  List<Object?> get props => [id, fullName, password, email];
+  List<Object?> get props => [id, fullName, password, email ,phone , address , profilePicture];
 }

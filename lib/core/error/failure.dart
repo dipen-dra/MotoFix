@@ -22,3 +22,9 @@ class ApiFailure extends Failure {
 class SharedPreferencesFailure extends Failure {
   const SharedPreferencesFailure({required super.message});
 }
+
+// --- ADD THIS CLASS ---
+class ServerFailure extends Failure {
+  const ServerFailure({required super.message});
+}
+// --------------------
