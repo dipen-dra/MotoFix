@@ -1,12 +1,10 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
-  // Timeouts
+
   static const connectionTimeout = Duration(seconds: 1000);
   static const receiveTimeout = Duration(seconds: 1000);
   
-  // For Android Emulator/Physical Device on the same Wi-Fi
-  // Updated with your Mac's IP address
   static const String serverAddress = "http://192.168.1.2:5050";
 
   static const String baseUrl = "$serverAddress/api/";
