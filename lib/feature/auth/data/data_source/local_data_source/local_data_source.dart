@@ -39,25 +39,21 @@ class UserLocalDataSource implements IUserDataSource {
 
   @override
   Future<void> deleteUser(String? token) {
-    // TODO: implement deleteUser
     throw UnimplementedError();
   }
 
   @override
   Future<UserEntity> getUser(String? token) {
-    // TODO: implement getUser
     throw UnimplementedError();
   }
 
   @override
   Future<UserEntity> updateUser(UserEntity user, String? token) {
-    // TODO: implement updateUser
     throw UnimplementedError();
   }
 
   @override
   Future<UserEntity> updateUserWithPicture(UserEntity user, File profilePictureFile) {
-    // TODO: implement updateUserWithPicture
     throw UnimplementedError();
   }
 }
