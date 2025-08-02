@@ -78,8 +78,6 @@ class _AddReviewViewState extends State<AddReviewView> {
                 backgroundColor: Colors.green,
               ),
             );
-            // After showing the SnackBar, pop the screen to go back.
-            // Passing 'true' can signal to the previous screen that the operation was successful.
             Navigator.of(context).pop(true);
           }
         },
