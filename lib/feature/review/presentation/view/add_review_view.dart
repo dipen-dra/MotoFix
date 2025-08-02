@@ -5,9 +5,6 @@ import 'package:motofix_app/feature/review/presentation/view_model/review_event.
 import 'package:motofix_app/feature/review/presentation/view_model/review_state.dart';
 import 'package:motofix_app/feature/review/presentation/view_model/review_view_model.dart';
 
-/// This is the Screen (View) for adding a new review.
-/// Its main responsibilities are to build the UI, send user actions (events)
-/// to the BLoC, and listen for state changes from the BLoC to update the UI.
 class AddReviewView extends StatefulWidget {
   final String bookingId;
 
@@ -51,8 +48,6 @@ class _AddReviewViewState extends State<AddReviewView> {
       bookingId: widget.bookingId,
     );
 
-    // Add the event to the BLoC to trigger the business logic.
-    // context.read() is a shorthand way to get the BLoC instance.
     context.read<ReviewBloc>().add(AddReviewSubmitted(review));
   }
 
@@ -63,13 +58,9 @@ class _AddReviewViewState extends State<AddReviewView> {
         title: const Text('Write a Review'),
         centerTitle: true,
       ),
-      // BlocListener is used for side-effects that happen once per state change,
-      // like showing a SnackBar, Dialog, or navigating. It does not rebuild the UI.
+
       body: BlocListener<ReviewBloc, ReviewState>(
         listener: (context, state) {
-          // --- THIS IS WHERE YOU HANDLE SHOWING THE SNACKBAR ---
-
-          // If the state is a failure, show a red error SnackBar.
           if (state is ReviewFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -92,8 +83,6 @@ class _AddReviewViewState extends State<AddReviewView> {
             Navigator.of(context).pop(true);
           }
         },
-        // BlocBuilder rebuilds the UI in response to state changes.
-        // It's best to wrap only the widgets that need to change.
         child: BlocBuilder<ReviewBloc, ReviewState>(
           builder: (context, state) {
             // Determine if the BLoC is in the middle of processing the review.
